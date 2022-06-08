@@ -3,39 +3,40 @@ package com.revature.reimbursement.models;
 public class User {
     //region <attributes>
     private String id;
-    private String userName;
-    private String userPassword;
+    private String username;
+    private String password;
     private String role_id;
-    //region <TO BE IMPLEMENTED>
-    //private String email;
-    //private String givenName;
-    //private String surname;
-    //private boolean isActive;
+
+    private String email;
+    private String givenName;
+    private String surname;
+    private boolean isActive;
+
+
     //endregion
 
-    //endregion
-
-
-    //region <constructors>
-    public User() {
-        super();
-    }
-
-    public User(String userName, String password, String role_id) {
-        this.userName = userName;
-        this.userPassword = password;
-        this.role_id = role_id;
-    }
-
-    public User(String id, String userName, String password, String role_id) {
+//region constructor
+    public User(String id, String username, String password, String role_id, String email, String givenName, String surname, boolean isActive) {
         this.id = id;
-        this.userName = userName;
-        this.userPassword = password;
+        this.username = username;
+        this.password = password;
         this.role_id = role_id;
+        this.email = email;
+        this.givenName = givenName;
+        this.surname = surname;
+        this.isActive = isActive;
     }
-    //endregion
 
-    //region <Accessors and Mutators>
+    public User(String username, String email, String givenName, String surname) {
+        this.username = username;
+        this.email = email;
+        this.givenName = givenName;
+        this.surname = surname;
+    }
+
+    public User(){}
+
+    //region gets and sets
     public String getId() {
         return id;
     }
@@ -44,20 +45,20 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRole_id() {
@@ -67,16 +68,52 @@ public class User {
     public void setRole_id(String role_id) {
         this.role_id = role_id;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getGivenName() {
+        return givenName;
+    }
+
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
     //endregion
 
-    //region <methods>
+
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
-                ", username='" + userName + '\'' +
-                ", role='" + role_id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role_id='" + role_id + '\'' +
+                ", email='" + email + '\'' +
+                ", givenName='" + givenName + '\'' +
+                ", surname='" + surname + '\'' +
+                ", isActive=" + isActive +
                 '}';
     }
-    //endregion
 }
