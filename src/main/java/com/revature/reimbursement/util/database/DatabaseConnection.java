@@ -21,7 +21,7 @@ public class DatabaseConnection {
             Class.forName("org.postgresql.Driver");
 
             /* using prop object to load url, username, password */
-            prop.load(new FileReader("src/main/resources/database/db.properties"));
+            prop.load(new FileReader("db.properties"));
 
             /* actually getting this connection */
             con = DriverManager.getConnection(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("password"));
