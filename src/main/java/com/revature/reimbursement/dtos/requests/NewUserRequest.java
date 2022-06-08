@@ -4,10 +4,13 @@ import com.revature.reimbursement.models.User;
 
 public class NewUserRequest {
     //region <attributes>
-    private String userName;
-    private String userPassword;
+    private String username;
+    private String password;
 
-    private final String role_id = "DEFAULT";
+    private String firstName;
+    private String lastName;
+    private String email;
+
     //endregion
 
     //region <constructors>
@@ -15,47 +18,72 @@ public class NewUserRequest {
         super();
     }
 
-    public NewUserRequest(String userName, String userPassword) {
-        this.userName = userName;
-        this.userPassword = userPassword;
+    public NewUserRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
     //endregion
 
     //region <Accessors and Mutators>
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getRole_id() {
-        return role_id;
+    public String getFirstName() {
+        return firstName;
     }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     //endregion
+
 
 
     //region <methods>
     public User extractUser() {
-        return new User(userName, userPassword, role_id);
+        return new User(username, email, firstName, lastName);
     }
 
     @Override
     public String toString() {
         return "NewUserRequest{" +
-                "username='" + userName + '\'' +
-                ", password='" + userPassword + '\'' +
-                ", role='" + role_id + '\'' +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstname='" + firstName + '\'' +
+                ", lastname='" + lastName + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
-    //endregion
+
+//endregion
 }

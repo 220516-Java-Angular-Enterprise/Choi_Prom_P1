@@ -1,6 +1,7 @@
 package com.revature.reimbursement.daos;
 
 import com.revature.reimbursement.models.User;
+import com.revature.reimbursement.util.custom_exceptions.InvalidSQLException;
 import com.revature.reimbursement.util.database.DatabaseConnection;
 
 import java.sql.Connection;
@@ -16,15 +17,21 @@ public class UserDAO implements CrudDAO<User> {
     @Override
     public void save(User obj) {
         try {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, userName, userPassword, role_id) VALUES (?, ?, ?, ?)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, password, role_id, email, given_name, surname, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, obj.getId());
-            ps.setString(2, obj.getUserName());
-            ps.setString(3, obj.getUserPassword());
+            ps.setString(2, obj.getUsername());
+            ps.setString(3, obj.getPassword());
             ps.setString(4, obj.getRole_id());
+            ps.setString(5, obj.getEmail());
+            ps.setString(6, obj.getGivenName());
+            ps.setString(7, obj.getSurname());
+            ps.setBoolean(8, obj.isActive());
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("An error occurred when trying to save to the database.");
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
     }
 
@@ -48,11 +55,20 @@ public class UserDAO implements CrudDAO<User> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                user = new User(rs.getString("id"), rs.getString("userName"),
-                        rs.getString("userPassword"), rs.getString("role_id"));
+                User us = new User(rs.getString("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role_id"),
+                        rs.getString("email"),
+                        rs.getString("given_name"),
+                        rs.getString("surname"),
+                        rs.getBoolean("is_active"));
+                user = us;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("An error occurred while trying to get User by ID from the database.");
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
 
         return user;
@@ -67,12 +83,20 @@ public class UserDAO implements CrudDAO<User> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                User user = new User(rs.getString("id"), rs.getString("userName"),
-                        rs.getString("userPassword"), rs.getString("role_id")); // user -> null
+                User user = new User(rs.getString("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role_id"),
+                        rs.getString("email"),
+                        rs.getString("given_name"),
+                        rs.getString("surname"),
+                        rs.getBoolean("is_active"));
                 users.add(user);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("An error occurred while trying to get all Users from the database.");
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
         }
         return users;
     }
@@ -88,12 +112,35 @@ public class UserDAO implements CrudDAO<User> {
                 usernames.add(rs.getString("userName"));
             }
         } catch (SQLException e) {
-            //throw new RuntimeException("An error occurred while trying to get all usernames from the database.");
             System.out.println("SQLException: " + e.getMessage());
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
 
         return usernames;
+    }
+
+    public User getUserbyUsernameAndPassword(String username, String password){
+        User user = new User();
+        try{
+            PreparedStatement ps = con.prepareStatement("SELECT users WHERE username='"+username+"' AND password='"+password+"'");
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                User us = new User(
+                        rs.getString("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("role_id"),
+                        rs.getString("email"),
+                        rs.getString("given_name"),
+                        rs.getString("surname"),
+                        rs.getBoolean("is_active"));
+            }
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+        return user;
     }
 }
