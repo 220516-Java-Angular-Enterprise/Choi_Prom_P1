@@ -1,8 +1,7 @@
 package com.revature.reimbursement.daos;
 
-import com.revature.reimbursement.models.User;
 import com.revature.reimbursement.models.UserRole;
-import com.revature.reimbursement.util.database.DatabaseConnection;
+import com.revature.reimbursement.util.database.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,11 +10,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UserRoleDAO implements CrudDAO<UserRole>{
-    Connection con = DatabaseConnection.getCon();
 
     @Override
     public void save(UserRole obj) {
-        try {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO user_roles (role_id, role) VALUES (?, ?)");
             ps.setString(1, obj.getRoleId());
             ps.setString(2, obj.getRole());
@@ -42,7 +40,7 @@ public class UserRoleDAO implements CrudDAO<UserRole>{
     public UserRole getById(String id) {
         UserRole userRole = new UserRole();
 
-        try {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM user_roles where role_id = ?");
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();

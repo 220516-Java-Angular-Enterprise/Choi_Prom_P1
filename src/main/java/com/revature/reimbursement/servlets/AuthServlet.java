@@ -3,10 +3,13 @@ package com.revature.reimbursement.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.dtos.requests.LoginRequest;
 import com.revature.reimbursement.dtos.response.Principal;
+import com.revature.reimbursement.services.TokenService;
 import com.revature.reimbursement.services.UserService;
 import com.revature.reimbursement.util.annotations.Inject;
+import com.revature.reimbursement.util.custom_exceptions.AuthenticationException;
 import com.revature.reimbursement.util.custom_exceptions.InvalidRequestException;
 import com.revature.reimbursement.util.custom_exceptions.ResourceConflictException;
+import jdk.nashorn.internal.parser.Token;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,25 +21,32 @@ public class AuthServlet extends HttpServlet {
     @Inject
     private final ObjectMapper mapper;
     private final UserService userService;
+    private final TokenService tokenService;
 
-    public AuthServlet(ObjectMapper mapper, UserService userService) {
+    public AuthServlet(ObjectMapper mapper, UserService userService, TokenService tokenService) {
         this.mapper = mapper;
         this.userService = userService;
+        this.tokenService = tokenService;
     }
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
             LoginRequest request = mapper.readValue(req.getInputStream(), LoginRequest.class);
-            Principal principal = userService.login(request.getUsername(), request.getPassword());
-            resp.setStatus(201);
+            Principal principal = new Principal(userService.login(request));
+
+            //Stateful session management
+            String token = tokenService.generateToken(principal);
+            resp.setHeader("Authorization", token);
             resp.setContentType("application/json");
-            resp.getWriter().write(mapper.writeValueAsString(principal.getUsername()+", "+ principal.getRole()+", "+ principal.getId()));
+            resp.getWriter().write(mapper.writeValueAsString("Username: " + principal.getUsername() +
+                    "\n"+ "Role_id:" + principal.getRole() +
+                    "\n"+ "User_id:" + principal.getId()));
         } catch(InvalidRequestException e){
             resp.setStatus(404);
-        } catch (ResourceConflictException e){
-            resp.setStatus(409);
+        } catch (AuthenticationException e){
+            resp.setStatus(401);
         } catch (Exception e){
             e.printStackTrace();
             resp.setStatus(500);

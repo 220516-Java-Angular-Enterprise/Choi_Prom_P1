@@ -1,17 +1,21 @@
 package com.revature.reimbursement.dtos.requests;
 
 public class LoginRequest {
-    String username;
-    String password;
+    private String username;
+    private String password;
 
 
-    // Constructors
+    //region <constructors>
+    public LoginRequest(){
+
+    }
     public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public LoginRequest(){}
+
+    //endregion
 
 //region Gets & Sets
     public String getUsername() {
