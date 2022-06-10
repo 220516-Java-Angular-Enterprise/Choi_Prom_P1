@@ -1,11 +1,13 @@
 package com.revature.reimbursement.dtos.response;
 
 import com.revature.reimbursement.models.User;
+import com.revature.reimbursement.services.UserRoleService;
 
 public class Principal {
-    String id;
-    String username;
-    String role;
+    UserRoleService userRoleService = new UserRoleService();
+   private String id;
+    private String username;
+    private  String role;
 
 
     //region <constructors>

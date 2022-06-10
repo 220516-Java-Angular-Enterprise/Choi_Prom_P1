@@ -1,25 +1,25 @@
 package com.revature.reimbursement.models;
 
 public class UserRole {
-    private String roleId;
+    private String id;
     private String role;
 
     //Constructors
 
-    public UserRole(String roleId, String role) {
-        this.roleId = roleId;
+    public UserRole(String id, String role) {
+        this.id = id;
         this.role = role;
     }
 
     public UserRole(){}
 
     //region gets and sets
-    public String getRoleId() {
-        return roleId;
+    public String getId() {
+        return id;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getRole() {
@@ -34,7 +34,7 @@ public class UserRole {
     @Override
     public String toString() {
         return "UserRole{" +
-                "roleId='" + roleId + '\'' +
+                "roleId='" + id + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }
