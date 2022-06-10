@@ -45,10 +45,7 @@ The PRISM application is another internal system that your expense reimbursement
 
 ### Functional Requirements
 
-- The system will register itself with the 3rd-party PRISM application
 - An new employee or new finance manager can request registration with the system
-- An admin user can approve or deny new registration requests
-- The system will register the user's information with the PRISM application for payment processing
 - A registered employee can authenticate with the system by providing valid credentials
 - An authenticated employee can view and manage their pending reimbursement requests
 - An authenticated employee can view their reimbursement request history (sortable and filterable)
@@ -56,7 +53,6 @@ The PRISM application is another internal system that your expense reimbursement
 - An authenticated finance manager can view a list of all pending reimbursement requests
 - An authenticated finance manager can view a history of requests that they have approved/denied
 - An authenticated finance manager can approve/deny reimbursement requests
-- The system will send a payment request to PRISM when a reimbursement request is approved
 - An admin user can deactivate user accounts, making them unable to log into the system
 - An admin user can reset a registered user's password
 
