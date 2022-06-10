@@ -7,7 +7,7 @@ import com.revature.reimbursement.services.UserService;
 public class Main {
     public static void main(String args[]){
 
-//        System.out.println(DatabaseConnection.getCon());
+//        System.out.println(ConnectionFactory.getCon());
 
     }
 

@@ -1,8 +1,7 @@
 package com.revature.reimbursement.daos;
 
 import com.revature.reimbursement.models.User;
-import com.revature.reimbursement.util.custom_exceptions.InvalidSQLException;
-import com.revature.reimbursement.util.database.DatabaseConnection;
+import com.revature.reimbursement.util.database.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,12 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO implements CrudDAO<User> {
-    Connection con = DatabaseConnection.getCon();
 
     @Override
     public void save(User obj) {
-        try {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, password, role_id, email, given_name, surname, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO users " +
+                    "(id, username, password, role_id, email, given_name, surname, is_active) " +
+                    "VALUES (?, ?, crypt(?, gen_salt('bf')), ?, ?, ?, ?, ?)");
             ps.setString(1, obj.getId());
             ps.setString(2, obj.getUsername());
             ps.setString(3, obj.getPassword());
@@ -49,21 +49,20 @@ public class UserDAO implements CrudDAO<User> {
     public User getById(String id) {
         User user = new User();
 
-        try {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users where id = ?");
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                User us = new User(rs.getString("id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("role_id"),
-                        rs.getString("email"),
-                        rs.getString("given_name"),
-                        rs.getString("surname"),
-                        rs.getBoolean("is_active"));
-                user = us;
+                user.setId(rs.getString("id"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setRole_id(rs.getString("role_id"));
+                user.setEmail(rs.getString("email"));
+                user.setGivenName(rs.getString("given_name"));
+                user.setSurname(rs.getString("surname"));
+                user.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
@@ -78,7 +77,7 @@ public class UserDAO implements CrudDAO<User> {
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
 
-        try {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users");
             ResultSet rs = ps.executeQuery();
 
@@ -104,7 +103,7 @@ public class UserDAO implements CrudDAO<User> {
     public List<String> getAllUsernames() {
         List<String> usernames = new ArrayList<>();
 
-        try {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT userName FROM users");
             ResultSet rs = ps.executeQuery();
 
@@ -120,21 +119,18 @@ public class UserDAO implements CrudDAO<User> {
         return usernames;
     }
 
-    public User getUserbyUsernameAndPassword(String username, String password){
-        User user = new User();
-        try{
-            PreparedStatement ps = con.prepareStatement("SELECT users WHERE username='"+username+"' AND password='"+password+"'");
+    public User GetUserByUsernameAndPassword(String username, String password){
+        User user = null;
+        try(Connection con = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = crypt(?, password)");
+            ps.setString(1, username);
+            ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                User us = new User(
-                        rs.getString("id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("role_id"),
-                        rs.getString("email"),
-                        rs.getString("given_name"),
-                        rs.getString("surname"),
-                        rs.getBoolean("is_active"));
+            while (rs.next()) {
+                user = new User(rs.getString("id"), rs.getString("username"),
+                        rs.getString("password"), rs.getString("role_id"),
+                        rs.getString("email"), rs.getString("given_name"),
+                        rs.getString("surname"), rs.getBoolean("is_active"));
             }
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());

@@ -1,20 +1,31 @@
 package com.revature.reimbursement.dtos.response;
 
+import com.revature.reimbursement.models.User;
+
 public class Principal {
+    String id;
     String username;
     String role;
-    String id;
 
 
-//Constructors
+    //region <constructors>
     public Principal(){}
 
-    public Principal(String username, String role, String id) {
+    public Principal(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.role = user.getRole_id();
+    }
+
+    public Principal(String id, String username, String role) {
         this.username = username;
         this.role = role;
         this.id = id;
     }
-//region gets and sets
+
+    //endregion <constructors>
+
+    //region gets and sets
     public String getUsername() {
         return username;
     }

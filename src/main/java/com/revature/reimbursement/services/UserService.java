@@ -1,14 +1,12 @@
 package com.revature.reimbursement.services;
 
 import com.revature.reimbursement.daos.UserDAO;
+import com.revature.reimbursement.dtos.requests.LoginRequest;
 import com.revature.reimbursement.dtos.requests.NewUserRequest;
-import com.revature.reimbursement.dtos.response.Principal;
 import com.revature.reimbursement.models.User;
 import com.revature.reimbursement.models.UserRole;
 import com.revature.reimbursement.util.annotations.Inject;
-import com.revature.reimbursement.util.custom_exceptions.InvalidRequestException;
-import com.revature.reimbursement.util.custom_exceptions.InvalidUserException;
-import com.revature.reimbursement.util.custom_exceptions.ResourceConflictException;
+import com.revature.reimbursement.util.custom_exceptions.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,22 +22,18 @@ public class UserService {
         this.userDAO = userDAO;
     }
 
-    public Principal login(String username, String password) {
-        Principal principal = new Principal();
-        UserRoleService userRoleService = new UserRoleService();
-        List<User> users = userDAO.getAll();
-
-        for (User u: users){
-            if (u.getUsername().equals(username)){
-                if (u.getPassword().equals(password)){
-                    principal.setId(u.getId());
-                    principal.setUsername(u.getUsername());
-                    principal.setRole((userRoleService.getRolebyId(u.getRole_id())));
-                    break;
-                }
-            }
+    public User login(LoginRequest request) {
+        //checks submitted credentials against required username and password regex
+        if(!isValidUsername(request.getUsername()) || !isValidPassword(request.getPassword())){
+            throw new InvalidRequestException("Invalid username or password.");
         }
-       return principal;
+        //access database to retrieve user information by username and password
+        User user = userDAO.GetUserByUsernameAndPassword(request.getUsername(), request.getPassword());
+        //if there is no credential match, will return null for user's username
+        if(user == null){
+            throw new AuthenticationException("Invalid credentials.");
+        }
+        return user;
     }
 
     public User register(NewUserRequest request) {
@@ -57,7 +51,7 @@ public class UserService {
                         UserRoleService userRoleService = new UserRoleService();
                         UserRole userRole = new UserRole(user.getRole_id(), "DEFAULT"); //Create new userRole with same user role ID
                         userRoleService.registerUserRole(userRole); // Registers into user into user_role table
-                        userDAO.save(user); // Reigsters user.
+                        userDAO.save(user); // Registers user.
 
                     } else throw new InvalidRequestException("Invalid email entered.");
                 } else throw new InvalidRequestException("Invalid password. Minimum eight characters, at least one letter, one number and one special character.");
@@ -87,15 +81,8 @@ public class UserService {
     return email.matches("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
 
     }
-    private User isValidCredentials(User user) {
-        if (user.getUsername() == null && user.getPassword() == null)
-            throw new InvalidUserException("Incorrect username and password.");
-        else if (user.getUsername() == null) throw new InvalidUserException("Incorrect username.");
-        else if (user.getPassword() == null) throw new InvalidUserException("Incorrect password.");
 
-        return user;
+    public List<User> getAllUsers() {
+        return userDAO.getAll();
     }
-
-
-
 }
