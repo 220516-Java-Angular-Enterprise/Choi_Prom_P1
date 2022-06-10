@@ -3,14 +3,13 @@ package com.revature.reimbursement.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.dtos.requests.LoginRequest;
 import com.revature.reimbursement.dtos.response.Principal;
-import com.revature.reimbursement.models.UserRole;
 import com.revature.reimbursement.services.TokenService;
 import com.revature.reimbursement.services.UserRoleService;
 import com.revature.reimbursement.services.UserService;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.custom_exceptions.AuthenticationException;
 import com.revature.reimbursement.util.custom_exceptions.InvalidRequestException;
-import com.revature.reimbursement.util.custom_exceptions.ResourceConflictException;
+import com.revature.reimbursement.util.custom_exceptions.InvalidUserException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,13 +41,15 @@ public class AuthServlet extends HttpServlet {
             resp.setHeader("Authorization", token);
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString("Username: " + principal.getUsername() +
-                    "\n"+ "Role:" + userRoleService.getRolebyId(principal.getRole()) +
+                    "\n"+ "Role:" + userRoleService.getRoleById(principal.getRole()) +
                     "\n"+ "User_id:" + principal.getId()));
+        } catch(AuthenticationException e) {
+            resp.setStatus(401); //UNAUTHORIZED
+        } catch(InvalidUserException e){
+            resp.setStatus(403); //FORBIDDEN
         } catch(InvalidRequestException e){
-            resp.setStatus(404);
-        } catch (AuthenticationException e){
-            resp.setStatus(401);
-        } catch (Exception e){
+            resp.setStatus(404); //NOT FOUND
+        } catch(Exception e){
             e.printStackTrace();
             resp.setStatus(500);
         }

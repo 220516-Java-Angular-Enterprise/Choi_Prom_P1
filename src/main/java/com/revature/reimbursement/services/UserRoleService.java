@@ -1,7 +1,6 @@
 package com.revature.reimbursement.services;
 
 import com.revature.reimbursement.daos.UserRoleDAO;
-import com.revature.reimbursement.models.User;
 import com.revature.reimbursement.models.UserRole;
 
 public class UserRoleService {
@@ -11,9 +10,8 @@ public class UserRoleService {
         userRoleDAO.save(userRole);
     }
 
-    public String getRolebyId(String id){
-        String role = userRoleDAO.getRoleById(id);
-        return role;
+    public String getRoleById(String id){
+        return userRoleDAO.getById(id).getRole();
     }
 }
 

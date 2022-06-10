@@ -33,6 +33,10 @@ public class UserService {
         if(user == null){
             throw new AuthenticationException("Invalid credentials.");
         }
+        //throws exception if user account is not activated
+        if(!user.isActive()){
+            throw new InvalidUserException("User account is not active");
+        }
         return user;
     }
 
@@ -46,7 +50,7 @@ public class UserService {
                     if(isValidEmail(user.getEmail())){
                         user.setId(UUID.randomUUID().toString()); //Sets Id
                         user.setRole_id("0"); //Sets Role Id
-                        user.setActive(true); //Sets Active boolean
+                        user.setActive(false); //Sets Active boolean
                         UserRoleService userRoleService = new UserRoleService();
                         userDAO.save(user); // Registers user.
 
@@ -82,4 +86,5 @@ public class UserService {
     public List<User> getAllUsers() {
         return userDAO.getAll();
     }
+
 }
