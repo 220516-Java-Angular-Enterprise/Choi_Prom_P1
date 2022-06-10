@@ -3,13 +3,14 @@ package com.revature.reimbursement.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.dtos.requests.LoginRequest;
 import com.revature.reimbursement.dtos.response.Principal;
+import com.revature.reimbursement.models.UserRole;
 import com.revature.reimbursement.services.TokenService;
+import com.revature.reimbursement.services.UserRoleService;
 import com.revature.reimbursement.services.UserService;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.custom_exceptions.AuthenticationException;
 import com.revature.reimbursement.util.custom_exceptions.InvalidRequestException;
 import com.revature.reimbursement.util.custom_exceptions.ResourceConflictException;
-import jdk.nashorn.internal.parser.Token;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,13 +36,13 @@ public class AuthServlet extends HttpServlet {
         try{
             LoginRequest request = mapper.readValue(req.getInputStream(), LoginRequest.class);
             Principal principal = new Principal(userService.login(request));
-
+            UserRoleService userRoleService = new UserRoleService();
             //Stateful session management
             String token = tokenService.generateToken(principal);
             resp.setHeader("Authorization", token);
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString("Username: " + principal.getUsername() +
-                    "\n"+ "Role_id:" + principal.getRole() +
+                    "\n"+ "Role:" + userRoleService.getRolebyId(principal.getRole()) +
                     "\n"+ "User_id:" + principal.getId()));
         } catch(InvalidRequestException e){
             resp.setStatus(404);

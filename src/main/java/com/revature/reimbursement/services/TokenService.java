@@ -13,6 +13,8 @@ public class TokenService {
     @Inject
     private JwtConfig jwtConfig;
 
+    UserRoleService userRoleService = new UserRoleService();
+
     //region <constructors>
     public TokenService(){
 
@@ -34,7 +36,7 @@ public class TokenService {
                 .setIssuedAt(new Date(now)) //date token is issued
                 .setExpiration(new Date(now + jwtConfig.getExpiration())) //date when token expires
                 .setSubject(subject.getUsername()) //get username token is assigned to
-                .claim("role", subject.getRole()) //get role token is assigned to
+                .claim("role", userRoleService.getRolebyId(subject.getRole())) //get role token is assigned to
                 .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey()); //token generation
         return tokenBuilder.compact(); //return in String form
     }

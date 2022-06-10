@@ -12,8 +12,8 @@ public class UserRoleService {
     }
 
     public String getRolebyId(String id){
-        UserRole userRole = userRoleDAO.getById(id);
-        return userRole.getRole();
+        String role = userRoleDAO.getRoleById(id);
+        return role;
     }
 }
 

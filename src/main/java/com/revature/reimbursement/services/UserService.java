@@ -45,12 +45,9 @@ public class UserService {
                         user.setPassword(request.getPassword()); //Sets password
                     if(isValidEmail(user.getEmail())){
                         user.setId(UUID.randomUUID().toString()); //Sets Id
-                        user.setRole_id(UUID.randomUUID().toString()); //Sets Role Id
+                        user.setRole_id("0"); //Sets Role Id
                         user.setActive(true); //Sets Active boolean
-                        //Saving role_id in user_roles table
                         UserRoleService userRoleService = new UserRoleService();
-                        UserRole userRole = new UserRole(user.getRole_id(), "DEFAULT"); //Create new userRole with same user role ID
-                        userRoleService.registerUserRole(userRole); // Registers into user into user_role table
                         userDAO.save(user); // Registers user.
 
                     } else throw new InvalidRequestException("Invalid email entered.");
