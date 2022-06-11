@@ -1,11 +1,12 @@
 package com.revature.reimbursement.models;
 
 
+import java.math.BigDecimal;
 
 public class Reimb {
     //region attributes
     private String reimbId;
-    private int amount;
+    private BigDecimal amount;
     private String description;
     private String submitted;
     private String resolved;
@@ -17,7 +18,8 @@ public class Reimb {
 //endregion
 
     //region constructor
-    public Reimb(String reimbId, int amount, String description, String submitted, String resolved, String paymentId, String authorId, String resolverId, String statusId, String typId) {
+    public Reimb(String reimbId, BigDecimal amount, String description, String submitted, String resolved, String paymentId,
+                 String authorId, String resolverId, String statusId, String typId) {
         this.reimbId = reimbId;
         this.amount = amount;
         this.description = description;
@@ -43,11 +45,11 @@ public class Reimb {
         this.reimbId = reimbId;
     }
 
-    public int getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

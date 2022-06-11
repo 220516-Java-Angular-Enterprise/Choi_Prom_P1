@@ -1,8 +1,10 @@
 package com.revature.reimbursement.dtos.requests;
 
+import java.math.BigDecimal;
+
 public class UpdatePendingReimbRequest {
     //region attributes
-    private int amount;
+    private BigDecimal amount;
     private String type;
     private String description;
     private String id;
@@ -10,7 +12,7 @@ public class UpdatePendingReimbRequest {
 
     //region constructor
 
-    public UpdatePendingReimbRequest(int amount, String type, String description, String id) {
+    public UpdatePendingReimbRequest(BigDecimal amount, String type, String description, String id) {
         this.amount = amount;
         this.type = type;
         this.description = description;
@@ -23,11 +25,11 @@ public class UpdatePendingReimbRequest {
 
     //region gets and sets
 
-    public int getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

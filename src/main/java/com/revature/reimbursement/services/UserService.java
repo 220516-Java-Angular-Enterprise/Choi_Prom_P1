@@ -87,4 +87,8 @@ public class UserService {
         return userDAO.getAll();
     }
 
+    public void update(User user){
+        userDAO.update(user);
+    }
+
 }

@@ -54,11 +54,11 @@ public class ManagerService {
     }
 
     public List<ReimbPrincipal> viewApprovalHistory(String resolver_id){
-        List<Reimb> getAll = reimbDAO.getAll();
+        List<Reimb> reimbursements = reimbDAO.getAll();
         List<Reimb> approvalHistory = new ArrayList<>();
         List<ReimbPrincipal> returnList = new ArrayList<>();
-        for(Reimb reimb:getAll){
-            if(reimb.getResolverId().equals(resolver_id)){
+        for(Reimb reimb:reimbursements){
+            if(reimb.getResolverId() != null && reimb.getResolverId().equals(resolver_id)){
                 approvalHistory.add(reimb);
             }
         }

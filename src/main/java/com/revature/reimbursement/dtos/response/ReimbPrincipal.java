@@ -1,8 +1,10 @@
 package com.revature.reimbursement.dtos.response;
 
+import java.math.BigDecimal;
+
 public class ReimbPrincipal {
     private String reimbId;
-    private int amount;
+    private BigDecimal amount;
     private String submitted;
     private String resolved;
     private String description;
@@ -12,7 +14,8 @@ public class ReimbPrincipal {
     //region <constructors>
     public ReimbPrincipal(){}
 
-    public ReimbPrincipal(String reimbId, int amount, String submitted, String resolved, String description, String statusId, String typeId) {
+    public ReimbPrincipal(String reimbId, BigDecimal amount, String submitted, String resolved,
+                          String description, String statusId, String typeId) {
         this.reimbId = reimbId;
         this.amount = amount;
         this.submitted = submitted;
@@ -22,7 +25,8 @@ public class ReimbPrincipal {
         this.typeId = typeId;
     }
 
-    public ReimbPrincipal(String reimbId, int amount, String submitted, String description, String statusId, String typeId){
+    public ReimbPrincipal(String reimbId, BigDecimal amount, String submitted,
+                          String description, String statusId, String typeId){
         this.reimbId = reimbId;
         this.amount = amount;
         this.submitted = submitted;
@@ -42,11 +46,11 @@ public class ReimbPrincipal {
         this.reimbId = reimbId;
     }
 
-    public int getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

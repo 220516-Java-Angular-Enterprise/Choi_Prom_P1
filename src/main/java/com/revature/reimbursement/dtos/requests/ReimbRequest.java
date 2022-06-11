@@ -1,14 +1,16 @@
 package com.revature.reimbursement.dtos.requests;
 
+import java.math.BigDecimal;
+
 public class ReimbRequest {
     //region attributes
-    private int amount;
+    private BigDecimal amount;
     private String type;
     private String description;
     //endregion attributes
 
     //region constructor
-    public ReimbRequest(int amount, String type, String description) {
+    public ReimbRequest(BigDecimal amount, String type, String description) {
         this.amount = amount;
         this.type = type;
         this.description = description;
@@ -18,11 +20,11 @@ public class ReimbRequest {
 
     //region gets and sets
 
-    public int getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

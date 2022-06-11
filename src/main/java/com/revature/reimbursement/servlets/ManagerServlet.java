@@ -1,14 +1,12 @@
 package com.revature.reimbursement.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.reimbursement.daos.ReimbDAO;
-import com.revature.reimbursement.daos.ReimbStatDAO;
-import com.revature.reimbursement.daos.ReimbTypeDAO;
-import com.revature.reimbursement.dtos.requests.ActivateRequest;
+import com.revature.reimbursement.dtos.requests.ApprovalRequest;
 import com.revature.reimbursement.dtos.response.Principal;
 import com.revature.reimbursement.dtos.response.ReimbPrincipal;
 import com.revature.reimbursement.models.Reimb;
 import com.revature.reimbursement.services.ManagerService;
+import com.revature.reimbursement.services.ReimbService;
 import com.revature.reimbursement.services.TokenService;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.custom_exceptions.InvalidRequestException;
@@ -26,13 +24,15 @@ public class ManagerServlet extends HttpServlet {
     //region <attributes>
     private final ObjectMapper mapper;
     private final ManagerService managerService;
+    private final ReimbService reimbService;
     private final TokenService tokenService;
     //endregion
 
     //region <constructors>
-    public ManagerServlet(ObjectMapper mapper, ManagerService managerService, TokenService tokenService){
+    public ManagerServlet(ObjectMapper mapper, ManagerService managerService, ReimbService reimbService, TokenService tokenService){
         this.mapper = mapper;
         this.managerService = managerService;
+        this.reimbService = reimbService;
         this.tokenService = tokenService;
     }
     //endregion
@@ -90,7 +90,13 @@ public class ManagerServlet extends HttpServlet {
             return;
         }
         try{
-
+            ApprovalRequest request = mapper.readValue(req.getInputStream(), ApprovalRequest.class);
+            managerService.setApproval(request);
+            Reimb reimbursement = reimbService.getById(request.getId());
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString(reimbursement));
+        } catch(InvalidRequestException e){
+            resp.setStatus(404);
         } catch(Exception e){
             e.printStackTrace();
             resp.setStatus(500);
