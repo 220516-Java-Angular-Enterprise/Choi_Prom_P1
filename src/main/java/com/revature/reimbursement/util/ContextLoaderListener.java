@@ -2,8 +2,11 @@ package com.revature.reimbursement.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.daos.UserDAO;
+import com.revature.reimbursement.models.User;
+import com.revature.reimbursement.services.AdminService;
 import com.revature.reimbursement.services.TokenService;
 import com.revature.reimbursement.services.UserService;
+import com.revature.reimbursement.servlets.AdminServlet;
 import com.revature.reimbursement.servlets.AuthServlet;
 import com.revature.reimbursement.servlets.UserServlet;
 
@@ -23,11 +26,14 @@ public class ContextLoaderListener implements ServletContextListener {
         /* Dependency injection. */
         UserServlet userServlet = new UserServlet(mapper, new UserService(new UserDAO()), new TokenService(new JwtConfig()));
         AuthServlet authServlet = new AuthServlet(mapper, new UserService(new UserDAO()), new TokenService(new JwtConfig()));
+        AdminServlet adminServlet = new AdminServlet(mapper, new AdminService(new UserDAO()),
+                new UserService(new UserDAO()), new TokenService(new JwtConfig()));
 
         /* Need ServletContext class to map whatever servlet to url path. */
         ServletContext context = sce.getServletContext();
         context.addServlet("UserServlet", userServlet).addMapping("/users/*");
         context.addServlet("AuthServlet", authServlet).addMapping("/auth");
+        context.addServlet("AdminServlet", adminServlet).addMapping("/admin");
     }
 
     @Override

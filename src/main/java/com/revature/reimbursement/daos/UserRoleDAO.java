@@ -46,10 +46,8 @@ public class UserRoleDAO implements CrudDAO<UserRole>{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                UserRole usRole = new UserRole(
-                        rs.getString("id"),
-                        rs.getString("role"));
-                userRole = usRole;
+                userRole.setId(rs.getString("id"));
+                userRole.setRole(rs.getString("role"));
             }
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
@@ -58,29 +56,6 @@ public class UserRoleDAO implements CrudDAO<UserRole>{
         }
 
         return userRole;
-    }
-
-    public String getRoleById(String id) {
-        UserRole userRole = new UserRole();
-
-        try(Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM user_roles where id = ?");
-            ps.setString(1, id);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                UserRole usRole = new UserRole(
-                        rs.getString("id"),
-                        rs.getString("role"));
-                userRole = usRole;
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
-            System.out.println("SQLState: " + e.getSQLState());
-            System.out.println("VendorError: " + e.getErrorCode());
-        }
-
-        return userRole.getRole();
     }
 
     @Override

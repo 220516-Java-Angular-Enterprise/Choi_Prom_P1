@@ -37,6 +37,24 @@ public class UserDAO implements CrudDAO<User> {
 
     @Override
     public void update(User obj) {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET username = ?," +
+                    "password = ?, role_id = ?, email = ?, given_name = ?, surname = ?," +
+                    "is_active = ? WHERE id = ?");
+            ps.setString(1, obj.getUsername());
+            ps.setString(2, obj.getPassword());
+            ps.setString(3, obj.getRole_id());
+            ps.setString(4, obj.getEmail());
+            ps.setString(5, obj.getGivenName());
+            ps.setString(6, obj.getSurname());
+            ps.setBoolean(7, obj.isActive());
+            ps.setString(8, obj.getId());
+            ps.executeUpdate();
+        } catch(SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
 
     }
 
@@ -47,7 +65,7 @@ public class UserDAO implements CrudDAO<User> {
 
     @Override
     public User getById(String id) {
-        User user = new User();
+        User user = null;
 
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users where id = ?");
@@ -55,14 +73,10 @@ public class UserDAO implements CrudDAO<User> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                user.setId(rs.getString("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setRole_id(rs.getString("role_id"));
-                user.setEmail(rs.getString("email"));
-                user.setGivenName(rs.getString("given_name"));
-                user.setSurname(rs.getString("surname"));
-                user.setActive(rs.getBoolean("is_active"));
+                user = new User(rs.getString("id"), rs.getString("username"),
+                        rs.getString("password"), rs.getString("role_id"),
+                        rs.getString("email"), rs.getString("given_name"),
+                        rs.getString("surname"), rs.getBoolean("is_active"));
             }
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
