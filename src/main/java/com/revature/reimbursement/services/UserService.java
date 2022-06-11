@@ -74,7 +74,7 @@ public class UserService {
         return !userDAO.getAllUsernames().contains(username);
     }
 
-    private boolean isValidPassword(String password) {
+    public boolean isValidPassword(String password) {
         return password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
     }
 
