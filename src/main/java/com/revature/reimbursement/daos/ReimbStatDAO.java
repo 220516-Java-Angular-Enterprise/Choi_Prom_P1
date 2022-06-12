@@ -29,7 +29,7 @@ public class ReimbStatDAO implements CrudDAO<ReimbStat>{
 
     @Override
     public ReimbStat getById(String id) {
-        ReimbStat status = null;
+        ReimbStat status = new ReimbStat();
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_statuses where status_id = ?");
             ps.setString(1, id);
@@ -48,7 +48,7 @@ public class ReimbStatDAO implements CrudDAO<ReimbStat>{
     }
 
     public ReimbStat getByStatus(String status){
-        ReimbStat stat = null;
+        ReimbStat stat = new ReimbStat();
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_statuses where status = ?");
             ps.setString(1, status);

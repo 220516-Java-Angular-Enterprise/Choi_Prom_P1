@@ -9,6 +9,8 @@ import com.revature.reimbursement.models.Reimb;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.custom_exceptions.InvalidRequestException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,13 +42,22 @@ public class ManagerService {
         return pending;
     }
 
-    public void setApproval(ApprovalRequest request){
+    public void setApproval(ApprovalRequest request, String resolver_id){
         if(!request.getStatus().equals("APPROVED") && !request.getStatus().equals("DENIED")){
             throw new InvalidRequestException("Unrecognized status.");
         }
+<<<<<<< HEAD
         Reimb reimbursement = reimbService.getById(request.getId());
         reimbursement.setResolved(request.getResolvedDate());
         reimbursement.setResolverId(request.getResolverId());
+=======
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+
+        Reimb reimbursement = reimbService.getById(request.getId());
+        reimbursement.setResolved(dtf.format(now));
+        reimbursement.setResolverId(resolver_id);
+>>>>>>> 6a7fc7bc281142ce16528a44c393199776c9fad4
         reimbursement.setStatusId(reimbStatusService.getIdByStatus(request.getStatus()));
         reimbService.update(reimbursement);
     }
@@ -56,7 +67,7 @@ public class ManagerService {
         List<Reimb> approvalHistory = new ArrayList<>();
         List<ReimbPrincipal> returnList = new ArrayList<>();
         for(Reimb reimb:reimbursements){
-            if(reimb.getResolverId() != null && reimb.getResolverId().equals(resolver_id)){
+            if(reimb.getResolverId() != null && reimb.getResolverId().equals(resolver_id)){ //refine if condition
                 approvalHistory.add(reimb);
             }
         }
@@ -68,8 +79,8 @@ public class ManagerService {
                     reimb.getSubmitted(),
                     reimb.getResolved(),
                     reimb.getDescription(),
-                    new ReimbStatusService(new ReimbStatDAO()).getStatusById(reimb.getStatusId()),
-                    new ReimbCatService(new ReimbTypeDAO()).getCategoryById(reimb.getTypId())
+                    reimbStatusService.getIdByStatus(reimb.getStatusId()),
+                    reimbCatService.getCategoryById(reimb.getTypId())
             );
             returnList.add(reimbPrincipal);
         }

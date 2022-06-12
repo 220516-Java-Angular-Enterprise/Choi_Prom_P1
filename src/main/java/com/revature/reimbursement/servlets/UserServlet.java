@@ -35,7 +35,8 @@ public class UserServlet extends HttpServlet {
     private final ReimbService reimbService;
 
     @Inject
-    public UserServlet(ObjectMapper mapper, UserService userService, TokenService tokenService, ReimbService reimbService) {
+    public UserServlet(ObjectMapper mapper, UserService userService,
+                       TokenService tokenService, ReimbService reimbService) {
         this.mapper = mapper;
         this.userService = userService;
         this.tokenService = tokenService;
@@ -48,7 +49,7 @@ public class UserServlet extends HttpServlet {
             String[] uris = req.getRequestURI().split("/"); //Splits doPost for various commands
 
 
-            if (uris.length == 4 && uris[3].equals("createUser")) { //Create new user
+            if (uris.length == 4 && uris[3].equals("register")) { //registers a new user
                     NewUserRequest request = mapper.readValue(req.getInputStream(), NewUserRequest.class);
                     User createdUser = userService.register(request);
                     resp.setStatus(201); // CREATED
@@ -65,17 +66,19 @@ public class UserServlet extends HttpServlet {
                     Reimb createdReimb = reimbService.createReimb(request, requester.getId());
                     resp.setStatus(201); // Created
                     resp.setContentType("application/json");
-                    resp.getWriter().write(mapper.writeValueAsString("Reimbursement Request Id: " + createdReimb.getReimbId()));
+                    resp.getWriter()
+                            .write(mapper.writeValueAsString("Reimbursement Request Id: " + createdReimb.getReimbId()));
 
-            } else if(uris.length == 4 && uris[3].equals("UpdateReimb")){ // Update Reimb request
+            } else if(uris.length == 4 && uris[3].equals("updateReimb")){ // Update Reimb request
                 Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
                 if (requester == null) {
                     resp.setStatus(401); //Unauthorized if user does not have token / logged in.
                     return;
                 }
-                    UpdatePendingReimbRequest request = mapper.readValue(req.getInputStream(), UpdatePendingReimbRequest.class);
+                    UpdatePendingReimbRequest request = mapper
+                            .readValue(req.getInputStream(), UpdatePendingReimbRequest.class);
                     reimbService.updateReimb(request);
-                    resp.setStatus(201); //Updated
+                    resp.setStatus(204); //NO CONTENT
                     resp.setContentType("application/json");
                     resp.getWriter().write(mapper.writeValueAsString("Successfully updated:" + request));
 
@@ -97,37 +100,43 @@ public class UserServlet extends HttpServlet {
             String[] uris = req.getRequestURI().split("/");//Splits doPost for various commands
 
             Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-            System.out.println(requester);
+
             if (requester == null) {
                 resp.setStatus(401); //Unauthorized if user does not have token / logged in.
                 return;
             }
             if (uris.length == 4 && uris[3].equals("sortHistoryByRecentDate")) { // Sort by most recent date.
                     List<ReimbPrincipal> reimbList = reimbService.getNonPendingReimbsByAuthorId(requester.getId());
-                    reimbList.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
+                    List<ReimbPrincipal> returnList = reimbList.stream()
+                            .sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed())
+                            .collect(Collectors.toList());
                     resp.setContentType("application/json");
-                    resp.getWriter().write(mapper.writeValueAsString(reimbList));
+                    resp.getWriter().write(mapper.writeValueAsString(returnList));
 
             } else if (uris.length == 4 && uris[3].equals("sortHistoryByOldestDate")) { // Sort by oldest date.
                     List<ReimbPrincipal> reimbList = reimbService.getNonPendingReimbsByAuthorId(requester.getId());
-                    reimbList.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted));
+                    List <ReimbPrincipal> returnList = reimbList.stream()
+                            .sorted(Comparator.comparing(ReimbPrincipal::getSubmitted)).collect(Collectors.toList());
                     resp.setContentType("application/json");
-                    resp.getWriter().write(mapper.writeValueAsString(reimbList));
+                    resp.getWriter().write(mapper.writeValueAsString(returnList));
 
             } else if (uris.length == 4 && uris[3].equals("viewPending")) { // View pending orders
-                    List<ReimbPrincipal> reimbList = reimbService.getReimbsByAuthorIdAndStatusId(requester.getId(), "0");
+                    List<ReimbPrincipal> reimbList = reimbService
+                            .getReimbsByAuthorIdAndStatusId(requester.getId(), "0");
                     reimbList.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
                     resp.setContentType("application/json");
                     resp.getWriter().write(mapper.writeValueAsString(reimbList));
 
             } else if (uris.length == 4 && uris[3].equals("viewDenied")) { // View denied orders
-                    List<ReimbPrincipal> reimbList = reimbService.getReimbsByAuthorIdAndStatusId(requester.getId(), "-1");
+                    List<ReimbPrincipal> reimbList = reimbService
+                            .getReimbsByAuthorIdAndStatusId(requester.getId(), "-1");
                     reimbList.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
                     resp.setContentType("application/json");
                     resp.getWriter().write(mapper.writeValueAsString(reimbList));
 
             } else if (uris.length == 4 && uris[3].equals("viewApproved")) { // View Approved orders
-                    List<ReimbPrincipal> reimbList = reimbService.getReimbsByAuthorIdAndStatusId(requester.getId(), "1");
+                    List<ReimbPrincipal> reimbList = reimbService
+                            .getReimbsByAuthorIdAndStatusId(requester.getId(), "1");
                     reimbList.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
                     resp.setContentType("application/json");
                     resp.getWriter().write(mapper.writeValueAsString(reimbList));
