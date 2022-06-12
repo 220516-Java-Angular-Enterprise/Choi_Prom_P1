@@ -73,7 +73,7 @@ public class ReimbDAO implements CrudDAO<Reimb>{
 
     @Override
     public Reimb getById(String id) {
-        Reimb reimbursementOrder = null;
+        Reimb reimbursementOrder = new Reimb();
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements where reimb_id = ?");
             ps.setString(1, id);

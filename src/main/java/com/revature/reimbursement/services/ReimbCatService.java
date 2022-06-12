@@ -13,13 +13,11 @@ public class ReimbCatService {
 
 
     public String getCategoryById(String typeId){
-        ReimbCat category = reimbTypeDAO.getById(typeId);
-        return category.getCategory();
+        return reimbTypeDAO.getById(typeId).getCategory();
     }
 
     public String getIdByCategory(String category){
-        ReimbCat cate = reimbTypeDAO.getByCategory(category);
-        return cate.getTypeId();
+        return reimbTypeDAO.getByCategory(category).getTypeId();
     }
 
 

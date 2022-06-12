@@ -4,7 +4,6 @@ public class ApprovalRequest {
     //region <attributes>
     private String id;
     private String resolvedDate;
-    private String resolverId;
     private String status;
     //endregion
 
@@ -13,10 +12,9 @@ public class ApprovalRequest {
 
     }
 
-    public ApprovalRequest(String id, String resolvedDate, String resolverId, String status) {
+    public ApprovalRequest(String id, String resolvedDate, String status) {
         this.id = id;
         this.resolvedDate = resolvedDate;
-        this.resolverId = resolverId;
         this.status = status;
     }
 //endregion
@@ -39,14 +37,6 @@ public class ApprovalRequest {
         this.resolvedDate = resolvedDate;
     }
 
-    public String getResolverId() {
-        return resolverId;
-    }
-
-    public void setResolverId(String resolverId) {
-        this.resolverId = resolverId;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -63,7 +53,6 @@ public class ApprovalRequest {
         return "ApprovalRequest{" +
                 "id='" + id + '\'' +
                 ", resolvedDate='" + resolvedDate + '\'' +
-                ", resolverId='" + resolverId + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

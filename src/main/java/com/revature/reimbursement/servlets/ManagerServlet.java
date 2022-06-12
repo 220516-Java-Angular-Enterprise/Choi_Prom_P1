@@ -29,7 +29,8 @@ public class ManagerServlet extends HttpServlet {
     //endregion
 
     //region <constructors>
-    public ManagerServlet(ObjectMapper mapper, ManagerService managerService, ReimbService reimbService, TokenService tokenService){
+    public ManagerServlet(ObjectMapper mapper, ManagerService managerService,
+                          ReimbService reimbService, TokenService tokenService){
         this.mapper = mapper;
         this.managerService = managerService;
         this.reimbService = reimbService;
@@ -78,7 +79,6 @@ public class ManagerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-        String[] uris = req.getRequestURI().split("/");
 
         if(requester == null){ //checks for valid auth token
             resp.setStatus(401); //Unauthorized
@@ -91,7 +91,7 @@ public class ManagerServlet extends HttpServlet {
         }
         try{
             ApprovalRequest request = mapper.readValue(req.getInputStream(), ApprovalRequest.class);
-            managerService.setApproval(request);
+            managerService.setApproval(request, requester.getId());
             Reimb reimbursement = reimbService.getById(request.getId());
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbursement));

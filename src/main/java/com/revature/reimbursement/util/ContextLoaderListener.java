@@ -27,10 +27,11 @@ public class ContextLoaderListener implements ServletContextListener {
         /* Dependency injection. */
         TokenService tokenService = new TokenService(new JwtConfig());
         UserService userService = new UserService(new UserDAO());
-        ManagerService managerService = new ManagerService(new ReimbDAO(),
+        ReimbService reimbService = new ReimbService(new ReimbDAO());
+        ManagerService managerService = new ManagerService(reimbService,
                 new ReimbStatusService(new ReimbStatDAO()), new ReimbCatService(new ReimbTypeDAO()));
         AdminService adminService = new AdminService(new UserService(new UserDAO()));
-        ReimbService reimbService = new ReimbService(new ReimbDAO());
+
 
         UserServlet userServlet = new UserServlet(mapper, userService, tokenService, reimbService);
         AuthServlet authServlet = new AuthServlet(mapper, userService, tokenService);
