@@ -84,6 +84,7 @@ public class UserDAO implements CrudDAO<User> {
             System.out.println("VendorError: " + e.getErrorCode());
         }
 
+        System.out.println(user);
         return user;
     }
 
