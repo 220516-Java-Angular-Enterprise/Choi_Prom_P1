@@ -3,7 +3,6 @@ package com.revature.reimbursement.dtos.requests;
 public class ApprovalRequest {
     //region <attributes>
     private String id;
-    private String resolvedDate;
     private String status;
     //endregion
 
@@ -12,9 +11,8 @@ public class ApprovalRequest {
 
     }
 
-    public ApprovalRequest(String id, String resolvedDate, String status) {
+    public ApprovalRequest(String id, String status) {
         this.id = id;
-        this.resolvedDate = resolvedDate;
         this.status = status;
     }
 //endregion
@@ -27,14 +25,6 @@ public class ApprovalRequest {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getResolvedDate() {
-        return resolvedDate;
-    }
-
-    public void setResolvedDate(String resolvedDate) {
-        this.resolvedDate = resolvedDate;
     }
 
     public String getStatus() {
@@ -52,7 +42,6 @@ public class ApprovalRequest {
     public String toString() {
         return "ApprovalRequest{" +
                 "id='" + id + '\'' +
-                ", resolvedDate='" + resolvedDate + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }
