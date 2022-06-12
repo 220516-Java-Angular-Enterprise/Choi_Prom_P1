@@ -26,6 +26,7 @@ public class ReimbService {
         this.reimbCatService = reimbCatService;
     }
 
+
     public Reimb getById(String id){
         return reimbDAO.getById(id);
     }
@@ -89,7 +90,7 @@ public class ReimbService {
                         reimbursement.getSubmitted(), reimbursement.getDescription(),
                         reimbStatusService.getStatusById(reimbursement.getReimbId()),
                         reimbCatService.getCategoryById(reimbursement.getReimbId())));
-            }
+            } else throw new InvalidRequestException("User does not exist.");
         }
         return history;
     }

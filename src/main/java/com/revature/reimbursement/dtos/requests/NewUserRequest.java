@@ -18,11 +18,15 @@ public class NewUserRequest {
         super();
     }
 
-    public NewUserRequest(String username, String password) {
+    public NewUserRequest(String username, String password, String firstName, String lastName, String email) {
         this.username = username;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
     }
-    //endregion
+
+//endregion
 
     //region <Accessors and Mutators>
     public String getUsername() {
