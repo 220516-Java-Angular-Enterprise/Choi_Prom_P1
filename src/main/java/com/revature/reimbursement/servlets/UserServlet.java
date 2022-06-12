@@ -1,6 +1,7 @@
 package com.revature.reimbursement.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.reimbursement.daos.ReimbTypeDAO;
 import com.revature.reimbursement.dtos.requests.NewUserRequest;
 import com.revature.reimbursement.dtos.requests.ReimbRequest;
 import com.revature.reimbursement.dtos.requests.UpdatePendingReimbRequest;
@@ -8,6 +9,7 @@ import com.revature.reimbursement.dtos.response.Principal;
 import com.revature.reimbursement.dtos.response.ReimbPrincipal;
 import com.revature.reimbursement.models.Reimb;
 import com.revature.reimbursement.models.User;
+import com.revature.reimbursement.services.ReimbCatService;
 import com.revature.reimbursement.services.ReimbService;
 import com.revature.reimbursement.services.TokenService;
 import com.revature.reimbursement.services.UserService;
@@ -47,65 +49,36 @@ public class UserServlet extends HttpServlet {
 
 
             if (uris.length == 4 && uris[3].equals("createUser")) { //Create new user
-                try {
                     NewUserRequest request = mapper.readValue(req.getInputStream(), NewUserRequest.class);
                     User createdUser = userService.register(request);
                     resp.setStatus(201); // CREATED
                     resp.setContentType("application/json");
                     resp.getWriter().write(mapper.writeValueAsString(createdUser.getId()));
-                } catch (InvalidRequestException e) {
-                    resp.setStatus(404); // BAD REQUEST
-                } catch (ResourceConflictException e) {
-                    resp.setStatus(409); // RESOURCE CONFLICT
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    resp.setStatus(500);
-                }
 
-
-            }
-            if (uris.length == 4 && uris[3].equals("createReimb")) { //Create new reimb request
+            } else if (uris.length == 4 && uris[3].equals("createReimb")) { //Create new reimb request
                 Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
                 if (requester == null) {
                     resp.setStatus(401); //Unauthorized if user does not have token / logged in.
                     return;
                 }
-                try {
                     ReimbRequest request = mapper.readValue(req.getInputStream(), ReimbRequest.class);
                     Reimb createdReimb = reimbService.createReimb(request, requester.getId());
                     resp.setStatus(201); // Created
                     resp.setContentType("application/json");
                     resp.getWriter().write(mapper.writeValueAsString("Reimbursement Request Id: " + createdReimb.getReimbId()));
-                } catch (InvalidRequestException e) {
-                    resp.setStatus(404);
-                } catch (ResourceConflictException e) {
-                    resp.setStatus(409);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    resp.setStatus(500);
-                }
 
-            } else if(uris.length == 4 && uris[3].equals("UpdateReimb")){
+            } else if(uris.length == 4 && uris[3].equals("UpdateReimb")){ // Update Reimb request
                 Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
                 if (requester == null) {
                     resp.setStatus(401); //Unauthorized if user does not have token / logged in.
                     return;
                 }
-                try{
                     UpdatePendingReimbRequest request = mapper.readValue(req.getInputStream(), UpdatePendingReimbRequest.class);
-                    Reimb pendingReimb = reimbService.getById(request.getId());
-                    if(!(pendingReimb.getStatusId().equals("0"))){ //throws invalid request if order isn't pending
-                        throw new InvalidRequestException("The current order is not pending.");
-                    }
                     reimbService.updateReimb(request);
                     resp.setStatus(201); //Updated
                     resp.setContentType("application/json");
                     resp.getWriter().write(mapper.writeValueAsString("Successfully updated:" + request));
 
-                } catch(Exception e){
-                    e.printStackTrace();
-                    resp.setStatus(500);
-                }
             }else throw new InvalidRequestException("The specified path does not exist.");
 
         } catch (InvalidRequestException e) {

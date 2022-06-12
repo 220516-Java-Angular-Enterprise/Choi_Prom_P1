@@ -30,7 +30,7 @@ public class ReimbTypeDAO implements CrudDAO<ReimbCat>{
 
     @Override
     public ReimbCat getById(String id) {
-        ReimbCat category = new ReimbCat();
+        ReimbCat category = null;
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_categories where type_id = ?");
             ps.setString(1, id);
@@ -49,7 +49,7 @@ public class ReimbTypeDAO implements CrudDAO<ReimbCat>{
     }
 
     public  ReimbCat getByCategory(String category){
-        ReimbCat cate = new ReimbCat();
+        ReimbCat cate = new ReimbCat(null, null);
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_categories where category = ?");
             ps.setString(1, category);
@@ -63,6 +63,7 @@ public class ReimbTypeDAO implements CrudDAO<ReimbCat>{
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
+        //System.out.println(cate);
         return cate;
     }
 

@@ -1,10 +1,8 @@
 package com.revature.reimbursement.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.daos.ReimbDAO;
 import com.revature.reimbursement.daos.ReimbStatDAO;
 import com.revature.reimbursement.daos.ReimbTypeDAO;
-import com.revature.reimbursement.daos.UserDAO;
 import com.revature.reimbursement.dtos.requests.ApprovalRequest;
 import com.revature.reimbursement.dtos.response.ReimbPrincipal;
 import com.revature.reimbursement.models.Reimb;
@@ -70,8 +68,8 @@ public class ManagerService {
                     reimb.getSubmitted(),
                     reimb.getResolved(),
                     reimb.getDescription(),
-                    reimb.getStatusId(),
-                    reimb.getTypId()
+                    new ReimbStatusService(new ReimbStatDAO()).getStatusById(reimb.getStatusId()),
+                    new ReimbCatService(new ReimbTypeDAO()).getCategoryById(reimb.getTypId())
             );
             returnList.add(reimbPrincipal);
         }

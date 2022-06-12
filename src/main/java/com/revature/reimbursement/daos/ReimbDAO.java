@@ -16,9 +16,7 @@ public class ReimbDAO implements CrudDAO<Reimb>{
     @Override
     public void save(Reimb obj) {
     try(Connection con = ConnectionFactory.getInstance().getConnection()){
-        PreparedStatement ps = con.prepareStatement("INSERT INTO reimbursements (reimb_id, amount, submitted, " +
-                "resolved, description, payment_id, author_id, resolver_id, status_id, type_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement ps = con.prepareStatement("INSERT INTO reimbursements (reimb_id, amount, submitted, resolved, description, payment_id, author_id, resolver_id, status_id, type_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         ps.setString(1, obj.getReimbId());
         ps.setBigDecimal(2, obj.getAmount());
         ps.setString(3, obj.getSubmitted());
@@ -40,24 +38,28 @@ public class ReimbDAO implements CrudDAO<Reimb>{
     @Override
     public void update(Reimb obj) {
     try(Connection con = ConnectionFactory.getInstance().getConnection()){
-        PreparedStatement ps = con.prepareStatement("UPDATE reimbursements SET" +
-                " amount = ?, submitted = ?, resolved = ?, description = ?," +
-                        "payment_id = ?, author_id = ?, resolver_id = ?," +
-                        "status_id = ?, type_id = ?" +
-                "WHERE reimb_id = ?");
-        ps.setBigDecimal(1, obj.getAmount());
-        ps.setString(2, obj.getSubmitted());
-        ps.setString(3, obj.getResolved());
-        ps.setString(4, obj.getDescription());
-        ps.setString(5, obj.getPaymentId());
-        ps.setString(6, obj.getAuthorId());
+        PreparedStatement ps = con.prepareStatement("UPDATE reimbursements SET " +
+                "author_id = ?, " +
+                "amount = ?, " +
+                "submitted = ?, " +
+                "resolved = ?, " +
+                "description = ?, " +
+                "payment_id = ?, " +
+                "resolver_id = ?, " +
+                "status_id = ?, " +
+                "type_id = ? WHERE reimb_id = ?");
+        ps.setString(1, obj.getAuthorId());
+        ps.setBigDecimal(2, obj.getAmount());
+        ps.setString(3, obj.getSubmitted());
+        ps.setString(4, obj.getResolved());
+        ps.setString(5, obj.getDescription());
+        ps.setString(6, obj.getPaymentId());
         ps.setString(7, obj.getResolverId());
         ps.setString(8, obj.getStatusId());
         ps.setString(9, obj.getTypId());
         ps.setString(10, obj.getReimbId());
         ps.executeUpdate();
     }catch(SQLException e){
-        System.out.println("HERE");
         System.out.println("SQLException: " + e.getMessage());
         System.out.println("SQLState: " + e.getSQLState());
         System.out.println("VendorError: " + e.getErrorCode());
@@ -71,7 +73,7 @@ public class ReimbDAO implements CrudDAO<Reimb>{
 
     @Override
     public Reimb getById(String id) {
-        Reimb reimbursementOrder = new Reimb();
+        Reimb reimbursementOrder = null;
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements where reimb_id = ?");
             ps.setString(1, id);
