@@ -45,7 +45,8 @@ public class AdminService {
     //changes a user's password
     public void changeUserPassword(PasswordRequest request){
         if(!userService.isValidPassword(request.getPassword())){
-            throw new InvalidRequestException("Invalid password. Minimum eight characters, at least one letter, one number and one special character.");
+            throw new InvalidRequestException("Invalid password. Minimum eight characters, at least one letter," +
+                    " one number and one special character.");
         }
         User user = userService.getUserById(request.getId());
         user.setPassword(request.getPassword());

@@ -1,11 +1,8 @@
 package com.revature.reimbursement.services;
 
 import com.revature.reimbursement.daos.ReimbDAO;
-import com.revature.reimbursement.daos.ReimbStatDAO;
-import com.revature.reimbursement.daos.ReimbTypeDAO;
-import com.revature.reimbursement.dtos.requests.ApprovalRequest;
 import com.revature.reimbursement.dtos.requests.ReimbRequest;
-import com.revature.reimbursement.dtos.requests.UpdatePendingReimbRequest;
+import com.revature.reimbursement.dtos.requests.UpdatePendingRequest;
 import com.revature.reimbursement.dtos.response.ReimbPrincipal;
 import com.revature.reimbursement.models.Reimb;
 import com.revature.reimbursement.util.annotations.Inject;
@@ -20,99 +17,88 @@ import java.util.UUID;
 public class ReimbService {
     @Inject
     private final ReimbDAO reimbDAO;
+    private final ReimbStatusService reimbStatusService;
+    public final ReimbCatService reimbCatService;
 
-    public ReimbService(ReimbDAO reimbDAO) {
+    public ReimbService(ReimbDAO reimbDAO, ReimbStatusService reimbStatusService, ReimbCatService reimbCatService) {
         this.reimbDAO = reimbDAO;
+        this.reimbStatusService = reimbStatusService;
+        this.reimbCatService = reimbCatService;
     }
 
-
-    public List<ReimbPrincipal> getReimbsByAuthorID(String authorId){
-        List<Reimb> reimbList= reimbDAO.getByAuthorId(authorId);
-        List<ReimbPrincipal> returnList = new ArrayList<>();
-        for(Reimb reimb: reimbList){
-            ReimbPrincipal reimbPrincipal = new ReimbPrincipal(
-                    reimb.getReimbId(),
-                    reimb.getAmount(),
-                    reimb.getSubmitted(),
-                    reimb.getResolved(),
-                    reimb.getDescription(),
-                    reimb.getStatusId(),
-                    reimb.getTypId()
-            );
-            returnList.add(reimbPrincipal);
-        }
-        return returnList;
+    public Reimb getById(String id){
+        return reimbDAO.getById(id);
     }
 
-    public List<ReimbPrincipal> getNonPendingReimbsByAuthorId(String id){
-        List<Reimb> reimbList = reimbDAO.getByAuthorId(id);
-        List<ReimbPrincipal> returnList = new ArrayList<>();
-        for(Reimb reimb: reimbList){
-            if(!(reimb.getStatusId().equals("0"))) {
-                ReimbPrincipal reimbPrincipal = new ReimbPrincipal(
-                        reimb.getReimbId(),
-                        reimb.getAmount(),
-                        reimb.getSubmitted(),
-                        reimb.getResolved(),
-                        reimb.getDescription(),
-                        reimb.getStatusId(),
-                        reimb.getTypId()
-                );
-            returnList.add(reimbPrincipal);
-            }
-        }
-        return returnList;
-    }
-
-    public List<ReimbPrincipal> getReimbsByAuthorIdAndStatusId(String authorId, String statusId){
-        List<Reimb> reimbList = reimbDAO.getByAuthorIdAndStatusId(authorId, statusId);
-        List<ReimbPrincipal> returnList = new ArrayList<>();
-        for(Reimb reimb: reimbList){
-            ReimbPrincipal reimbPrincipal = new ReimbPrincipal(
-                    reimb.getReimbId(),
-                    reimb.getAmount(),
-                    reimb.getSubmitted(),
-                    reimb.getResolved(),
-                    reimb.getDescription(),
-                    new ReimbStatusService(new ReimbStatDAO()).getStatusById(reimb.getStatusId()),
-                    new ReimbCatService(new ReimbTypeDAO()).getCategoryById(reimb.getTypId())
-            );
-            returnList.add(reimbPrincipal);
-        }
-        return returnList;
-    }
-
-    public List<ReimbPrincipal> getReimbsByStatusId(String statusId){
-        List<Reimb> reimbList = reimbDAO.getByStatusId(statusId);
-        List<ReimbPrincipal> returnList = new ArrayList<>();
-        for(Reimb reimb: reimbList){
-            ReimbPrincipal reimbPrincipal = new ReimbPrincipal(
-                    reimb.getReimbId(),
-                    reimb.getAmount(),
-                    reimb.getSubmitted(),
-                    reimb.getResolved(),
-                    reimb.getDescription(),
-                    reimb.getStatusId(),
-                    reimb.getTypId()
-            );
-            returnList.add(reimbPrincipal);
-        }
-        return returnList;
-    }
-
-    public List<Reimb> getAll(){
+    public List<Reimb> getAll() {
         return reimbDAO.getAll();
     }
 
-    public void update(Reimb reimbursement){
+    public void update(Reimb reimbursement) {
         reimbDAO.update(reimbursement);
     }
 
-    public void updateReimb(UpdatePendingReimbRequest request){
+    public List<ReimbPrincipal> getAllPending(){
+        List<ReimbPrincipal> pending = new ArrayList<>();
+        List<Reimb> reimbursements = getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals("0")){
+                pending.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getReimbId()),
+                        reimbCatService.getCategoryById(reimbursement.getReimbId())));
+            }
+        }
+        return pending;
+    }
+
+    public List<ReimbPrincipal> getAllApproved(){
+        List<ReimbPrincipal> approved = new ArrayList<>();
+        List<Reimb> reimbursements = getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals("1")){
+                approved.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getReimbId()),
+                        reimbCatService.getCategoryById(reimbursement.getReimbId())));
+            }
+        }
+        return approved;
+    }
+
+    public List<ReimbPrincipal> getAllDenied(){
+        List<ReimbPrincipal> denied = new ArrayList<>();
+        List<Reimb> reimbursements = getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals("-1")){
+                denied.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getReimbId()),
+                        reimbCatService.getCategoryById(reimbursement.getReimbId())));
+            }
+        }
+        return denied;
+    }
+
+    public List<ReimbPrincipal> getHistoryByAuthor(String id){
+        List<ReimbPrincipal> history = new ArrayList<>();
+        List<Reimb> reimbursements = getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals(id)){
+                history.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getReimbId()),
+                        reimbCatService.getCategoryById(reimbursement.getReimbId())));
+            }
+        }
+        return history;
+    }
+
+    public void updateReimb(UpdatePendingRequest request){
         Reimb currentReimb = reimbDAO.getById(request.getId());
 
         if(currentReimb.getStatusId().equals("0")){ //Will go further if status is pending
-            currentReimb.setTypId(new ReimbCatService(new ReimbTypeDAO()).getIdByCategory(request.getType()));  //Sets type
+            currentReimb.setTypId(reimbCatService.getIdByCategory(request.getType()));  //Sets type
             if(!(currentReimb.getTypId() == null)){  // If type does not exist, throws invalid request
                 currentReimb.setAmount(request.getAmount());
                 currentReimb.setDescription(request.getDescription());
@@ -123,12 +109,11 @@ public class ReimbService {
     }
 
     public Reimb createReimb(ReimbRequest request, String id){
-        ReimbCatService catService = new ReimbCatService(new ReimbTypeDAO());
         Reimb reimbursement = new Reimb(); 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();
 
-        reimbursement.setTypId(catService.getIdByCategory(request.getType())); //Extract from request
+        reimbursement.setTypId(reimbCatService.getIdByCategory(request.getType())); //Extract from request
         if(reimbursement.getTypId() == null){
             throw new InvalidRequestException("Type does not exist.");
         } else {
@@ -142,18 +127,5 @@ public class ReimbService {
 
         reimbDAO.save(reimbursement); // Save in database
         return reimbursement;
-    }
-
-    public Reimb getById(String id){
-        Reimb reimb = reimbDAO.getById(id);
-        return reimb;
-    }
-
-    public List<Reimb> getAll() {
-        return reimbDAO.getAll();
-    }
-
-    public void update(Reimb reimbursement) {
-        reimbDAO.update(reimbursement);
     }
 }

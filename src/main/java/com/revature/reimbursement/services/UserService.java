@@ -40,6 +40,14 @@ public class UserService {
         return user;
     }
 
+    public List<User> getAllUsers() {
+        return userDAO.getAll();
+    }
+
+    public void update(User user){
+        userDAO.update(user);
+    }
+
     public User register(NewUserRequest request) {
         User user = request.extractUser(); //Username, email, firstName, and lastName are already passed into user.
 
@@ -82,13 +90,4 @@ public class UserService {
     return email.matches("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
 
     }
-
-    public List<User> getAllUsers() {
-        return userDAO.getAll();
-    }
-
-    public void update(User user){
-        userDAO.update(user);
-    }
-
 }

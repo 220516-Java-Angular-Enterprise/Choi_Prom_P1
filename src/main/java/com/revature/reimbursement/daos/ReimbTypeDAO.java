@@ -63,7 +63,6 @@ public class ReimbTypeDAO implements CrudDAO<ReimbCat>{
             System.out.println("SQLState: " + e.getSQLState());
             System.out.println("VendorError: " + e.getErrorCode());
         }
-        //System.out.println(cate);
         return cate;
     }
 

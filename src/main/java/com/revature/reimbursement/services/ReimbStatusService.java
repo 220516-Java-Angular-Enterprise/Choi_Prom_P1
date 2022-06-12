@@ -12,12 +12,11 @@ public class ReimbStatusService {
     }
 
     public String getStatusById(String statusId){
-        ReimbStat status = reimbStatDAO.getById(statusId);
-        return status.getStatus();
+        return reimbStatDAO.getById(statusId).getStatus();
     }
 
     public String getIdByStatus(String status){
-        ReimbStat stat = reimbStatDAO.getByStatus(status);
-        return stat.getStatusId();
+        return reimbStatDAO.getByStatus(status).getStatusId();
+
     }
 }

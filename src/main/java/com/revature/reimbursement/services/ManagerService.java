@@ -21,8 +21,7 @@ public class ManagerService {
     private final ReimbCatService reimbCatService;
 
 
-    public ManagerService(ReimbService reimbService,
-                          ReimbStatusService reimbStatusService, ReimbCatService reimbCatService){
+    public ManagerService(ReimbService reimbService, ReimbStatusService reimbStatusService, ReimbCatService reimbCatService){
         this.reimbService = reimbService;
         this.reimbStatusService = reimbStatusService;
         this.reimbCatService = reimbCatService;
@@ -46,18 +45,12 @@ public class ManagerService {
         if(!request.getStatus().equals("APPROVED") && !request.getStatus().equals("DENIED")){
             throw new InvalidRequestException("Unrecognized status.");
         }
-<<<<<<< HEAD
-        Reimb reimbursement = reimbService.getById(request.getId());
-        reimbursement.setResolved(request.getResolvedDate());
-        reimbursement.setResolverId(request.getResolverId());
-=======
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();
 
         Reimb reimbursement = reimbService.getById(request.getId());
         reimbursement.setResolved(dtf.format(now));
         reimbursement.setResolverId(resolver_id);
->>>>>>> 6a7fc7bc281142ce16528a44c393199776c9fad4
         reimbursement.setStatusId(reimbStatusService.getIdByStatus(request.getStatus()));
         reimbService.update(reimbursement);
     }
