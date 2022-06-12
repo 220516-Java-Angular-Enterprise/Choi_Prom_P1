@@ -26,7 +26,8 @@ public class AdminServlet extends HttpServlet {
     private final UserService userService;
     private final TokenService tokenService;
 
-    public AdminServlet(ObjectMapper mapper, AdminService adminService, UserService userService, TokenService tokenService) {
+    public AdminServlet(ObjectMapper mapper, AdminService adminService,
+                        UserService userService, TokenService tokenService) {
         this.mapper = mapper;
         this.adminService = adminService;
         this.userService = userService;
