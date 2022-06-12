@@ -1,13 +1,16 @@
 package com.revature.reimbursement.services;
 
 import com.revature.reimbursement.daos.ReimbDAO;
+import com.revature.reimbursement.daos.ReimbStatDAO;
 import com.revature.reimbursement.daos.ReimbTypeDAO;
 import com.revature.reimbursement.dtos.requests.ApprovalRequest;
 import com.revature.reimbursement.dtos.requests.ReimbRequest;
 import com.revature.reimbursement.dtos.requests.UpdatePendingReimbRequest;
 import com.revature.reimbursement.dtos.response.ReimbPrincipal;
 import com.revature.reimbursement.models.Reimb;
+import com.revature.reimbursement.util.custom_exceptions.InvalidRequestException;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -70,8 +73,8 @@ public class ReimbService {
                     reimb.getSubmitted(),
                     reimb.getResolved(),
                     reimb.getDescription(),
-                    reimb.getStatusId(),
-                    reimb.getTypId()
+                    new ReimbStatusService(new ReimbStatDAO()).getStatusById(reimb.getStatusId()),
+                    new ReimbCatService(new ReimbTypeDAO()).getCategoryById(reimb.getTypId())
             );
             returnList.add(reimbPrincipal);
         }
@@ -107,9 +110,16 @@ public class ReimbService {
     public void updateReimb(UpdatePendingReimbRequest request){
         Reimb currentReimb = reimbDAO.getById(request.getId());
 
-        currentReimb.setAmount(request.getAmount());
-        currentReimb.setDescription(request.getDescription());
-        currentReimb.setTypId(request.getType());
+        System.out.println("Status ID: " + currentReimb.getStatusId());
+        if(currentReimb.getStatusId().equals("0")){ //Will go further if status is pending
+            System.out.println("Recognized as pending.");
+            currentReimb.setTypId(new ReimbCatService(new ReimbTypeDAO()).getIdByCategory(request.getType()));  //Sets type
+            System.out.println(currentReimb);
+            if(!(currentReimb.getTypId() == null)){  // If type does not exist, throws invalid request
+                currentReimb.setAmount(request.getAmount());
+                currentReimb.setDescription(request.getDescription());
+            } else throw new InvalidRequestException("Type entered does not exist.");
+        } else throw new InvalidRequestException("The current order is not pending.");
 
         reimbDAO.update(currentReimb);
     }
