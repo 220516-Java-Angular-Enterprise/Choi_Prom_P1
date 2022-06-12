@@ -16,21 +16,21 @@ import java.util.List;
 
 public class ManagerService {
     @Inject
-    private final ReimbDAO reimbDAO;
+    private final ReimbService reimbService;
     private final ReimbStatusService reimbStatusService;
     private final ReimbCatService reimbCatService;
 
 
-    public ManagerService(ReimbDAO reimbDAO,
+    public ManagerService(ReimbService reimbService,
                           ReimbStatusService reimbStatusService, ReimbCatService reimbCatService){
-        this.reimbDAO = reimbDAO;
+        this.reimbService = reimbService;
         this.reimbStatusService = reimbStatusService;
         this.reimbCatService = reimbCatService;
     }
 
     public List<ReimbPrincipal> getAllPending(){
         List<ReimbPrincipal> pending = new ArrayList<>();
-        List<Reimb> reimbursements = reimbDAO.getAll();
+        List<Reimb> reimbursements = reimbService.getAll();
         for(Reimb reimbursement: reimbursements){
             if(reimbursement.getStatusId().equals("0")){
                 pending.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
@@ -46,15 +46,15 @@ public class ManagerService {
         if(!request.getStatus().equals("APPROVED") && !request.getStatus().equals("DENIED")){
             throw new InvalidRequestException("Unrecognized status.");
         }
-        Reimb reimbursement = reimbDAO.getById(request.getId());
+        Reimb reimbursement = reimbService.getById(request.getId());
         reimbursement.setResolved(request.getResolvedDate());
         reimbursement.setResolverId(request.getResolverId());
         reimbursement.setStatusId(reimbStatusService.getIdByStatus(request.getStatus()));
-        reimbDAO.update(reimbursement);
+        reimbService.update(reimbursement);
     }
 
     public List<ReimbPrincipal> viewApprovalHistory(String resolver_id){
-        List<Reimb> reimbursements = reimbDAO.getAll();
+        List<Reimb> reimbursements = reimbService.getAll();
         List<Reimb> approvalHistory = new ArrayList<>();
         List<ReimbPrincipal> returnList = new ArrayList<>();
         for(Reimb reimb:reimbursements){

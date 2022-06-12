@@ -1,13 +1,11 @@
 package com.revature.reimbursement.services;
 
-import com.revature.reimbursement.daos.UserDAO;
 import com.revature.reimbursement.dtos.requests.ActivateRequest;
 import com.revature.reimbursement.dtos.requests.PasswordRequest;
 import com.revature.reimbursement.dtos.requests.RoleRequest;
 import com.revature.reimbursement.models.User;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.custom_exceptions.InvalidRequestException;
-import com.revature.reimbursement.util.custom_exceptions.InvalidUserException;
 
 public class AdminService {
     @Inject

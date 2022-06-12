@@ -2,6 +2,7 @@ package com.revature.reimbursement.services;
 
 import com.revature.reimbursement.daos.ReimbDAO;
 import com.revature.reimbursement.daos.ReimbTypeDAO;
+import com.revature.reimbursement.dtos.requests.ApprovalRequest;
 import com.revature.reimbursement.dtos.requests.ReimbRequest;
 import com.revature.reimbursement.dtos.requests.UpdatePendingReimbRequest;
 import com.revature.reimbursement.dtos.response.ReimbPrincipal;
@@ -93,6 +94,14 @@ public class ReimbService {
             returnList.add(reimbPrincipal);
         }
         return returnList;
+    }
+
+    public List<Reimb> getAll(){
+        return reimbDAO.getAll();
+    }
+
+    public void update(Reimb reimbursement){
+        reimbDAO.update(reimbursement);
     }
 
     public void updateReimb(UpdatePendingReimbRequest request){
