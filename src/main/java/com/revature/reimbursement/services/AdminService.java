@@ -1,6 +1,7 @@
 package com.revature.reimbursement.services;
 
 import com.revature.reimbursement.dtos.requests.ActivateRequest;
+import com.revature.reimbursement.dtos.requests.DeleteRequest;
 import com.revature.reimbursement.dtos.requests.PasswordRequest;
 import com.revature.reimbursement.dtos.requests.RoleRequest;
 import com.revature.reimbursement.models.User;
@@ -20,7 +21,7 @@ public class AdminService {
     public void setUserActivity(ActivateRequest request){
         User user = userService.getUserById(request.getId());
         if(user == null){
-            throw new InvalidRequestException("The request is not valid");
+            throw new InvalidRequestException("The specified user id does not exist.");
         }
         if(request.isActive()){
             user.setActive(true);
@@ -34,12 +35,16 @@ public class AdminService {
 
     //changes a user's role
     public void setUserRole(RoleRequest request){
-        User user = userService.getUserById(request.getId());
-        if(user == null || Integer.valueOf(request.getRole_id()) < 0 || Integer.valueOf(request.getRole_id()) > 2){
-            throw new InvalidRequestException("The request is not valid");
+        try{
+            User user = userService.getUserById(request.getId());
+            if(user == null || Integer.valueOf(request.getRole_id()) < 0 || Integer.valueOf(request.getRole_id()) > 2){
+                throw new InvalidRequestException("The request is not valid");
+            }
+            user.setRole_id(request.getRole_id());
+            userService.update(user);
+        } catch(NumberFormatException e){
+            throw new InvalidRequestException("Improper request input.");
         }
-        user.setRole_id(request.getRole_id());
-        userService.update(user);
     }
 
     //changes a user's password
@@ -50,6 +55,14 @@ public class AdminService {
         }
         User user = userService.getUserById(request.getId());
         user.setPassword(request.getPassword());
-        userService.update(user);
+        userService.updatePassword(user);
+    }
+
+    public void deleteUser(DeleteRequest request){
+        User user = userService.getUserById(request.getId());
+        if(user == null){
+            throw new InvalidRequestException("The specified user id does not exist.");
+        }
+        userService.delete(user);
     }
 }

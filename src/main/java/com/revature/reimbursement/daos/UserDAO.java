@@ -39,7 +39,7 @@ public class UserDAO implements CrudDAO<User> {
     public void update(User obj) {
         try(Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("UPDATE users SET username = ?," +
-                    "password = crypt(?, gen_salt('bf')), role_id = ?, email = ?, given_name = ?, surname = ?," +
+                    "password = ?, role_id = ?, email = ?, given_name = ?, surname = ?," +
                     "is_active = ? WHERE id = ?");
             ps.setString(1, obj.getUsername());
             ps.setString(2, obj.getPassword());
@@ -58,9 +58,31 @@ public class UserDAO implements CrudDAO<User> {
 
     }
 
+    public void updatePassword(User obj) {
+        try(Connection con = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET password = crypt(?, gen_salt('bf')), WHERE id = ?");
+            ps.setString(1, obj.getPassword());
+            ps.setString(2, obj.getId());
+            ps.executeUpdate();
+        } catch(SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+
+    }
+
     @Override
     public void delete(String id) {
-
+        try(Connection con = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement ps = con.prepareStatement("DELETE FROM users WHERE id = ?");
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch(SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
     }
 
     @Override
@@ -68,7 +90,7 @@ public class UserDAO implements CrudDAO<User> {
         User user = null;
 
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM users where id = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE id = ?");
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -134,8 +156,8 @@ public class UserDAO implements CrudDAO<User> {
         return usernames;
     }
 
-    public User GetUserByUsernameAndPassword(String username, String password){
-        User user = null;
+    public User getUserByUsernameAndPassword(String username, String password){
+        User user = new User();
         try(Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = crypt(?, password)");
             ps.setString(1, username);

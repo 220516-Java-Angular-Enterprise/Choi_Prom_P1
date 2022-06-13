@@ -34,12 +34,102 @@ public class ManagerService {
             if(reimbursement.getStatusId().equals("0")){
                 pending.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
                         reimbursement.getSubmitted(), reimbursement.getDescription(),
-                        reimbStatusService.getStatusById(reimbursement.getReimbId()),
-                        reimbCatService.getCategoryById(reimbursement.getReimbId())));
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
             }
         }
         return pending;
     }
+
+    public List<ReimbPrincipal> getAllPendingLodging(){
+        List<ReimbPrincipal> pendingLodging = new ArrayList<>();
+        List<Reimb> reimbursements = reimbService.getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals("0") && reimbursement.getTypId().equals("1")){
+                pendingLodging.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
+            }
+        }
+        return pendingLodging;
+    }
+
+    public List<ReimbPrincipal> getAllPendingTravel(){
+        List<ReimbPrincipal> pendingTravel = new ArrayList<>();
+        List<Reimb> reimbursements = reimbService.getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals("0") && reimbursement.getTypId().equals("2")){
+                pendingTravel.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
+            }
+        }
+        return pendingTravel;
+    }
+
+    public List<ReimbPrincipal> getAllPendingFood(){
+        List<ReimbPrincipal> pendingFood = new ArrayList<>();
+        List<Reimb> reimbursements = reimbService.getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals("0") && reimbursement.getTypId().equals("3")){
+                pendingFood.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
+            }
+        }
+        return pendingFood;
+    }
+
+    public List<ReimbPrincipal> getAllPendingOther(){
+        List<ReimbPrincipal> pendingOther = new ArrayList<>();
+        List<Reimb> reimbursements = reimbService.getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals("0") && reimbursement.getTypId().equals("0")){
+                pendingOther.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
+            }
+        }
+        return pendingOther;
+    }
+
+
+    public List<ReimbPrincipal> getAllDeniedByResolverId(String resolver_id){
+        List<ReimbPrincipal> denied = new ArrayList<>();
+        List<Reimb> reimbursements = reimbService.getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals("-1") && reimbursement.getResolverId().equals(resolver_id)){
+                denied.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
+            }
+        }
+        return denied;
+    }
+
+    public List<ReimbPrincipal> getAllApprovedByResolverId(String resolver_id){
+        List<ReimbPrincipal> approved = new ArrayList<>();
+        List<Reimb> reimbursements = reimbService.getAll();
+        for(Reimb reimbursement: reimbursements){
+            if(reimbursement.getStatusId().equals("1") && reimbursement.getResolverId().equals(resolver_id)){
+                approved.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                        reimbursement.getSubmitted(), reimbursement.getDescription(),
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
+            }
+        }
+        return approved;
+    }
+
+
+
+
+
 
     public void setApproval(ApprovalRequest request, String resolver_id){
         if(!request.getStatus().equals("APPROVED") && !request.getStatus().equals("DENIED")){
@@ -72,7 +162,7 @@ public class ManagerService {
                     reimb.getSubmitted(),
                     reimb.getResolved(),
                     reimb.getDescription(),
-                    reimbStatusService.getIdByStatus(reimb.getStatusId()),
+                    reimbStatusService.getStatusById(reimb.getStatusId()),
                     reimbCatService.getCategoryById(reimb.getTypId())
             );
             returnList.add(reimbPrincipal);
