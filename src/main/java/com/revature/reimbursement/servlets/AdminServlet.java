@@ -40,6 +40,7 @@ public class AdminServlet extends HttpServlet {
     @Override //get all users
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+        String[] uris = req.getRequestURI().split("/");
 
         if(requester == null){
             resp.setStatus(401); //Unauthorized
@@ -50,9 +51,24 @@ public class AdminServlet extends HttpServlet {
             resp.setStatus(403); //Forbidden
             return;
         }
-        List<User> users = userService.getAllUsers();
-        resp.setContentType("application/json");
-        resp.getWriter().write(mapper.writeValueAsString(users));
+        try{
+            if(uris.length == 4 && uris[3].equals("allUsers")){
+                List<User> users = userService.getAllUsers();
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(users));
+            }
+            else if(uris.length == 4 && uris[3].equals("pendingUsers")){
+                List<User> users = userService.getAllPendingUsers();
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(users));
+            }
+        } catch(JsonParseException | JsonMappingException | NullPointerException e){
+            resp.setStatus(400); //BAD REQUEST
+        } catch(Exception e){
+            e.printStackTrace();
+            resp.setStatus(500);
+        }
+
     }
 
     @Override

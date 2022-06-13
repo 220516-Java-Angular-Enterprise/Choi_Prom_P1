@@ -8,6 +8,7 @@ import com.revature.reimbursement.models.UserRole;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.custom_exceptions.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +43,17 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userDAO.getAll();
+    }
+
+    public List<User> getAllPendingUsers(){
+        List<User> users = userDAO.getAll();
+        List<User> pendingUsers = new ArrayList<>();
+        for(User user: users){
+            if(!user.isActive()){
+                pendingUsers.add(user);
+            }
+        }
+        return pendingUsers;
     }
 
     public void update(User user){
