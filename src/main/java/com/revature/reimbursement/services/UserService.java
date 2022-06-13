@@ -97,4 +97,8 @@ public class UserService {
     return email.matches("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
 
     }
+
+    public void updatePassword(User user) {
+        userDAO.updatePassword(user);
+    }
 }
