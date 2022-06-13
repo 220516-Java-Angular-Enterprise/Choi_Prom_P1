@@ -17,7 +17,7 @@ public class UserDAO implements CrudDAO<User> {
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
             PreparedStatement ps = con.prepareStatement("INSERT INTO users " +
                     "(id, username, password, role_id, email, given_name, surname, is_active) " +
-                    "VALUES (?, ?, crypt(?, gen_salt('bf')), ?, ?, ?, ?, ?)");
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, obj.getId());
             ps.setString(2, obj.getUsername());
             ps.setString(3, obj.getPassword());
@@ -145,7 +145,7 @@ public class UserDAO implements CrudDAO<User> {
     public User GetUserByUsernameAndPassword(String username, String password){
         User user = new User();
         try(Connection con = ConnectionFactory.getInstance().getConnection()){
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = crypt(?, password)");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
