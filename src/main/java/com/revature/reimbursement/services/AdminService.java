@@ -35,12 +35,16 @@ public class AdminService {
 
     //changes a user's role
     public void setUserRole(RoleRequest request){
-        User user = userService.getUserById(request.getId());
-        if(user == null || Integer.valueOf(request.getRole_id()) < 0 || Integer.valueOf(request.getRole_id()) > 2){
-            throw new InvalidRequestException("The request is not valid");
+        try{
+            User user = userService.getUserById(request.getId());
+            if(user == null || Integer.valueOf(request.getRole_id()) < 0 || Integer.valueOf(request.getRole_id()) > 2){
+                throw new InvalidRequestException("The request is not valid");
+            }
+            user.setRole_id(request.getRole_id());
+            userService.update(user);
+        } catch(NumberFormatException e){
+            throw new InvalidRequestException("Improper request input.");
         }
-        user.setRole_id(request.getRole_id());
-        userService.update(user);
     }
 
     //changes a user's password

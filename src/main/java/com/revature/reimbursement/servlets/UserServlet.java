@@ -1,5 +1,6 @@
 package com.revature.reimbursement.servlets;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.dtos.requests.NewUserRequest;
@@ -71,22 +72,9 @@ public class UserServlet extends HttpServlet {
                 resp.getWriter()
                         .write(mapper.writeValueAsString("Reimbursement Request Id: " + createdReimb.getReimbId()));
 
-            } else if(uris.length == 4 && uris[3].equals("updateReimb")){ // Update Reimb request
-                Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-                if (requester == null) {
-                    resp.setStatus(401); //Unauthorized if user does not have token / logged in.
-                    return;
-                }
-                    UpdatePendingRequest request = mapper
-                            .readValue(req.getInputStream(), UpdatePendingRequest.class);
-                    reimbService.updateReimb(request);
-                    resp.setStatus(204); //NO CONTENT
-                    resp.setContentType("application/json");
-                    resp.getWriter().write(mapper.writeValueAsString("Successfully updated:" + request));
+            } else throw new InvalidRequestException("The specified path does not exist.");
 
-            }else throw new InvalidRequestException("The specified path does not exist.");
-
-        } catch(JsonMappingException | NullPointerException e) {
+        } catch(JsonParseException | JsonMappingException | NullPointerException e) {
             resp.setStatus(400); //BAD REQUEST
         } catch (InvalidRequestException e) {
             resp.setStatus(404); // NOT FOUND
@@ -144,7 +132,7 @@ public class UserServlet extends HttpServlet {
 
             } else throw new InvalidRequestException("The specified path does not exist.");
 
-        } catch(JsonMappingException | NullPointerException e) {
+        } catch(JsonParseException | JsonMappingException | NullPointerException e) {
             resp.setStatus(400); //BAD REQUEST
         } catch (InvalidRequestException e) {
             resp.setStatus(404); // NOT FOUND
@@ -158,6 +146,29 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+        try{
+            String[] uris = req.getRequestURI().split("/");
+
+            if(uris.length == 4 && uris[3].equals("updateReimb")) { // Update Reimb request
+                Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+                if (requester == null) {
+                    resp.setStatus(401); //Unauthorized if user does not have token / logged in.
+                    return;
+                }
+                UpdatePendingRequest request = mapper
+                        .readValue(req.getInputStream(), UpdatePendingRequest.class);
+                reimbService.updateReimb(request);
+                resp.setStatus(204); //NO CONTENT
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString("Successfully updated:" + request));
+            }
+        } catch(JsonParseException |JsonMappingException | NullPointerException e) {
+            resp.setStatus(400); //BAD REQUEST
+        } catch (InvalidRequestException e) {
+            resp.setStatus(404); // NOT FOUND
+        } catch(Exception e){
+            e.printStackTrace();
+            resp.setStatus(500);
+        }
     }
 }

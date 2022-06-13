@@ -143,7 +143,7 @@ public class UserDAO implements CrudDAO<User> {
     }
 
     public User GetUserByUsernameAndPassword(String username, String password){
-        User user = null;
+        User user = new User();
         try(Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = crypt(?, password)");
             ps.setString(1, username);
