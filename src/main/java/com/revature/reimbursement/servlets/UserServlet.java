@@ -147,26 +147,26 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
-            String[] uris = req.getRequestURI().split("/");
+            String[] uris = req.getRequestURI().split("/");//Splits doPost for various commands
 
-            if(uris.length == 4 && uris[3].equals("updateReimb")) { // Update Reimb request
-                Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-                if (requester == null) {
-                    resp.setStatus(401); //Unauthorized if user does not have token / logged in.
-                    return;
-                }
+            Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+            if (requester == null) {
+                resp.setStatus(401); //Unauthorized if user does not have token / logged in.
+                return;
+            }
+
                 UpdatePendingRequest request = mapper
                         .readValue(req.getInputStream(), UpdatePendingRequest.class);
                 reimbService.updateReimb(request);
                 resp.setStatus(204); //NO CONTENT
                 resp.setContentType("application/json");
                 resp.getWriter().write(mapper.writeValueAsString("Successfully updated:" + request));
-            }
         } catch(JsonParseException |JsonMappingException | NullPointerException e) {
             resp.setStatus(400); //BAD REQUEST
         } catch (InvalidRequestException e) {
             resp.setStatus(404); // NOT FOUND
-        } catch(Exception e){
+        }catch(Exception e){
             e.printStackTrace();
             resp.setStatus(500);
         }
