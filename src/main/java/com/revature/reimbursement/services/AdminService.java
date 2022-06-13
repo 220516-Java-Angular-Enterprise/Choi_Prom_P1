@@ -55,7 +55,7 @@ public class AdminService {
         }
         User user = userService.getUserById(request.getId());
         user.setPassword(request.getPassword());
-        userService.update(user);
+        userService.updatePassword(user);
     }
 
     public void deleteUser(DeleteRequest request){
