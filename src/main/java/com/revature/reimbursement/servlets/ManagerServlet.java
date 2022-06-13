@@ -1,5 +1,6 @@
 package com.revature.reimbursement.servlets;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.dtos.requests.ApprovalRequest;
@@ -71,7 +72,7 @@ public class ManagerServlet extends HttpServlet {
             else{
                 throw new InvalidRequestException("The specified path does not exist.");
             }
-        } catch(JsonMappingException | NullPointerException e) {
+        } catch(JsonParseException | JsonMappingException | NullPointerException e) {
             resp.setStatus(400); //BAD REQUEST
         } catch(Exception e){
             e.printStackTrace();
@@ -99,7 +100,7 @@ public class ManagerServlet extends HttpServlet {
             Reimb reimbursement = reimbService.getById(request.getId());
             resp.setContentType("application/json");
             resp.getWriter().write(mapper.writeValueAsString(reimbursement));
-        } catch(JsonMappingException | NullPointerException e) {
+        } catch(JsonParseException | JsonMappingException | NullPointerException e) {
             resp.setStatus(400); //BAD REQUEST
         } catch(InvalidRequestException e){
             resp.setStatus(404); //NOT FOUND

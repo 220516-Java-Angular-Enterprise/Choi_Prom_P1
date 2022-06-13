@@ -79,6 +79,9 @@ public class UserService {
     }
 
     private boolean isValidUsername(String username) {
+        if(username == null){
+            throw new InvalidRequestException("Empty username entered.");
+        }
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
     }
 

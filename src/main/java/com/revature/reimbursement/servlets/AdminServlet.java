@@ -1,5 +1,6 @@
 package com.revature.reimbursement.servlets;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.dtos.requests.ActivateRequest;
@@ -94,7 +95,7 @@ public class AdminServlet extends HttpServlet {
             else{
                 throw new InvalidRequestException("The specified path does not exist.");
             }
-        } catch(JsonMappingException | NullPointerException e){
+        } catch(JsonParseException | JsonMappingException | NullPointerException e){
             resp.setStatus(400); //BAD REQUEST
         } catch(InvalidRequestException e){
             resp.setStatus(404); //NOT FOUND
@@ -129,7 +130,7 @@ public class AdminServlet extends HttpServlet {
             else{
                 throw new InvalidRequestException("The specified path does not exist.");
             }
-        } catch(JsonMappingException | NullPointerException e){
+        } catch(JsonParseException | JsonMappingException | NullPointerException e){
             resp.setStatus(400); //BAD REQUEST
         } catch(InvalidRequestException e){
             resp.setStatus(404); //NOT FOUND
