@@ -4,10 +4,10 @@ import com.revature.reimbursement.daos.UserDAO;
 import com.revature.reimbursement.dtos.requests.LoginRequest;
 import com.revature.reimbursement.dtos.requests.NewUserRequest;
 import com.revature.reimbursement.models.User;
-import com.revature.reimbursement.models.UserRole;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.custom_exceptions.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,20 +28,34 @@ public class UserService {
             throw new InvalidRequestException("Invalid username or password.");
         }
         //access database to retrieve user information by username and password
-        User user = userDAO.GetUserByUsernameAndPassword(request.getUsername(), request.getPassword());
+        User user = userDAO.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
         //if there is no credential match, will return null for user's username
         if(user == null){
+            System.out.println("I'm here in login request!");
             throw new AuthenticationException("Invalid credentials.");
         }
         //throws exception if user account is not activated
         if(!user.isActive()){
+            System.out.println(user);
             throw new InvalidUserException("User account is not active");
         }
+
         return user;
     }
 
     public List<User> getAllUsers() {
         return userDAO.getAll();
+    }
+
+    public List<User> getAllPendingUsers(){
+        List<User> users = userDAO.getAll();
+        List<User> pendingUsers = new ArrayList<>();
+        for(User user: users){
+            if(!user.isActive()){
+                pendingUsers.add(user);
+            }
+        }
+        return pendingUsers;
     }
 
     public void update(User user){

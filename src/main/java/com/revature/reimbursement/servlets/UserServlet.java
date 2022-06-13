@@ -23,12 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.Formatter;
 import java.util.List;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 
 public class UserServlet extends HttpServlet {
@@ -113,7 +108,7 @@ public class UserServlet extends HttpServlet {
                     resp.getWriter().write(mapper.writeValueAsString(returnList));
 
             } else if (uris.length == 4 && uris[3].equals("viewPending")) { // View pending orders
-                    List<ReimbPrincipal> reimbList = reimbService.getAllPending();
+                    List<ReimbPrincipal> reimbList = reimbService.getAllPendingByAuthorId(requester.getId());
                     reimbList.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
                     resp.setContentType("application/json");
                     resp.getWriter().write(mapper.writeValueAsString(reimbList));
@@ -155,13 +150,14 @@ public class UserServlet extends HttpServlet {
                 resp.setStatus(401); //Unauthorized if user does not have token / logged in.
                 return;
             }
-
+            if (uris.length == 4 && uris[3].equals("updateReimb")) {
                 UpdatePendingRequest request = mapper
                         .readValue(req.getInputStream(), UpdatePendingRequest.class);
                 reimbService.updateReimb(request);
-                resp.setStatus(204); //NO CONTENT
+                resp.setStatus(200); //APPROVED
                 resp.setContentType("application/json");
                 resp.getWriter().write(mapper.writeValueAsString("Successfully updated:" + request));
+            } else throw new InvalidRequestException("The specified path does not exist.");
         } catch(JsonParseException |JsonMappingException | NullPointerException e) {
             resp.setStatus(400); //BAD REQUEST
         } catch (InvalidRequestException e) {
@@ -171,4 +167,5 @@ public class UserServlet extends HttpServlet {
             resp.setStatus(500);
         }
     }
+
 }
