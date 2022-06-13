@@ -63,6 +63,42 @@ public class ManagerServlet extends HttpServlet {
                 resp.setContentType("application/json");
                 resp.getWriter().write(mapper.writeValueAsString(pending));
             }
+            else if(uris.length == 4 && uris[3].equals("viewPendingOther")){
+                List<ReimbPrincipal> history = managerService.getAllPendingOther();
+                history.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(history));
+            }
+            else if(uris.length == 4 && uris[3].equals("viewPendingLodging")){
+                List<ReimbPrincipal> history = managerService.getAllPendingLodging();
+                history.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(history));
+            }
+            else if(uris.length == 4 && uris[3].equals("viewPendingTravel")){
+                List<ReimbPrincipal> history = managerService.getAllPendingTravel();
+                history.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(history));
+            }
+            else if(uris.length == 4 && uris[3].equals("viewPendingFood")){
+                List<ReimbPrincipal> history = managerService.getAllPendingFood();
+                history.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(history));
+            }
+            else if(uris.length == 4 && uris[3].equals("viewApproved")){
+                List<ReimbPrincipal> history = managerService.getAllApprovedByResolverId(requester.getId());
+                history.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(history));
+            }
+            else if(uris.length == 4 && uris[3].equals("viewDenied")){
+                List<ReimbPrincipal> history = managerService.getAllDeniedByResolverId(requester.getId());
+                history.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(history));
+            }
             else if(uris.length == 4 && uris[3].equals("viewHistory")){
                 List<ReimbPrincipal> history = managerService.viewApprovalHistory(requester.getId());
                 history.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());

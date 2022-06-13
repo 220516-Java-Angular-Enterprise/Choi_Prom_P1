@@ -68,7 +68,10 @@ public class AdminServlet extends HttpServlet {
             e.printStackTrace();
             resp.setStatus(500);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> bf340a97c504a708e3a7c5bf7564280ccdf48849
     }
 
     @Override

@@ -39,15 +39,15 @@ public class ReimbService {
         reimbDAO.update(reimbursement);
     }
 
-    public List<ReimbPrincipal> getAllPending(){
+    public List<ReimbPrincipal> getAllPendingByAuthorId(String id){
         List<ReimbPrincipal> pending = new ArrayList<>();
         List<Reimb> reimbursements = getAll();
         for(Reimb reimbursement: reimbursements){
-            if(reimbursement.getStatusId().equals("0")){
+            if(reimbursement.getStatusId().equals("0") && reimbursement.getAuthorId().equals(id)){
                 pending.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
                         reimbursement.getSubmitted(), reimbursement.getDescription(),
-                        reimbStatusService.getStatusById(reimbursement.getReimbId()),
-                        reimbCatService.getCategoryById(reimbursement.getReimbId())));
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
             }
         }
         return pending;
@@ -60,8 +60,8 @@ public class ReimbService {
             if(reimbursement.getStatusId().equals("1")){
                 approved.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
                         reimbursement.getSubmitted(), reimbursement.getDescription(),
-                        reimbStatusService.getStatusById(reimbursement.getReimbId()),
-                        reimbCatService.getCategoryById(reimbursement.getReimbId())));
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
             }
         }
         return approved;
@@ -74,8 +74,8 @@ public class ReimbService {
             if(reimbursement.getStatusId().equals("-1")){
                 denied.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
                         reimbursement.getSubmitted(), reimbursement.getDescription(),
-                        reimbStatusService.getStatusById(reimbursement.getReimbId()),
-                        reimbCatService.getCategoryById(reimbursement.getReimbId())));
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
             }
         }
         return denied;
@@ -86,10 +86,11 @@ public class ReimbService {
         List<Reimb> reimbursements = getAll();
         for(Reimb reimbursement: reimbursements){
             if(reimbursement.getStatusId().equals(id)){
-                history.add(new ReimbPrincipal(reimbursement.getReimbId(), reimbursement.getAmount(),
+                history.add(new ReimbPrincipal(
+                        reimbursement.getReimbId(), reimbursement.getAmount(),
                         reimbursement.getSubmitted(), reimbursement.getDescription(),
-                        reimbStatusService.getStatusById(reimbursement.getReimbId()),
-                        reimbCatService.getCategoryById(reimbursement.getReimbId())));
+                        reimbStatusService.getStatusById(reimbursement.getStatusId()),
+                        reimbCatService.getCategoryById(reimbursement.getTypId())));
             } else throw new InvalidRequestException("User does not exist.");
         }
         return history;
