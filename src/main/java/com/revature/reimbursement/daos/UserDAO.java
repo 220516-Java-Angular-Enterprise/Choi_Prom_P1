@@ -60,7 +60,15 @@ public class UserDAO implements CrudDAO<User> {
 
     @Override
     public void delete(String id) {
-
+        try(Connection con = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement ps = con.prepareStatement("DELETE FROM users WHERE id = ?");
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch(SQLException e){
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
     }
 
     @Override
@@ -68,7 +76,7 @@ public class UserDAO implements CrudDAO<User> {
         User user = null;
 
         try(Connection con = ConnectionFactory.getInstance().getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM users where id = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE id = ?");
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
 

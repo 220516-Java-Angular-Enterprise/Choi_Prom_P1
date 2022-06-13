@@ -48,6 +48,10 @@ public class UserService {
         userDAO.update(user);
     }
 
+    public void delete(User user){
+        userDAO.delete(user.getId());
+    }
+
     public User register(NewUserRequest request) {
         User user = request.extractUser(); //Username, email, firstName, and lastName are already passed into user.
 
