@@ -1,5 +1,6 @@
 package com.revature.reimbursement.servlets;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.dtos.requests.NewUserRequest;
 import com.revature.reimbursement.dtos.requests.ReimbRequest;
@@ -63,13 +64,9 @@ public class UserServlet extends HttpServlet {
 
             } else if (uris.length == 4 && uris[3].equals("createReimb")) { //Create new reimb request
                 Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-                if (requester == null) {
-                    resp.setStatus(401); //Unauthorized if user does not have token / logged in.
-                    return;
-                }
                 ReimbRequest request = mapper.readValue(req.getInputStream(), ReimbRequest.class);
                 Reimb createdReimb = reimbService.createReimb(request, requester.getId());
-                resp.setStatus(201); // Created
+                resp.setStatus(201); // CREATED
                 resp.setContentType("application/json");
                 resp.getWriter()
                         .write(mapper.writeValueAsString("Reimbursement Request Id: " + createdReimb.getReimbId()));
@@ -89,8 +86,10 @@ public class UserServlet extends HttpServlet {
 
             }else throw new InvalidRequestException("The specified path does not exist.");
 
+        } catch(JsonMappingException | NullPointerException e) {
+            resp.setStatus(400); //BAD REQUEST
         } catch (InvalidRequestException e) {
-            resp.setStatus(404); // BAD REQUEST
+            resp.setStatus(404); // NOT FOUND
         } catch (ResourceConflictException e) {
             resp.setStatus(409); // RESOURCE CONFLICT
         } catch (Exception e) {
@@ -145,13 +144,20 @@ public class UserServlet extends HttpServlet {
 
             } else throw new InvalidRequestException("The specified path does not exist.");
 
+        } catch(JsonMappingException | NullPointerException e) {
+            resp.setStatus(400); //BAD REQUEST
         } catch (InvalidRequestException e) {
-            resp.setStatus(404); // BAD REQUEST
+            resp.setStatus(404); // NOT FOUND
         } catch (ResourceConflictException e) {
             resp.setStatus(409); // RESOURCE CONFLICT
         } catch (Exception e) {
             e.printStackTrace();
             resp.setStatus(500);
         }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPut(req, resp);
     }
 }

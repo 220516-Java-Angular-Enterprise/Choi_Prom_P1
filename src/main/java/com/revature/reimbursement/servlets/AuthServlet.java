@@ -1,5 +1,6 @@
 package com.revature.reimbursement.servlets;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.dtos.requests.LoginRequest;
 import com.revature.reimbursement.dtos.response.Principal;
@@ -43,6 +44,8 @@ public class AuthServlet extends HttpServlet {
             resp.getWriter().write(mapper.writeValueAsString("Username: " + principal.getUsername() +
                     "\n"+ "Role:" + userRoleService.getRoleById(principal.getRole()) +
                     "\n"+ "User_id:" + principal.getId()));
+        } catch(JsonMappingException | NullPointerException e) {
+            resp.setStatus(400); //BAD REQUEST
         } catch(AuthenticationException e) {
             resp.setStatus(401); //UNAUTHORIZED
         } catch(InvalidUserException e){
