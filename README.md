@@ -1,7 +1,7 @@
 # Choi_Prom_P1
 Joseph Choi and Seanghay Prom's Project 1 Repository
 
-# Java Enterprise Foundations Project Requirements
+# Java Enterprise Foundations Project
 
 ## Project Description
 
