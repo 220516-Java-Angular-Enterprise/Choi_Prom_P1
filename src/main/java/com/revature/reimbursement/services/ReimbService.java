@@ -18,7 +18,7 @@ public class ReimbService {
     @Inject
     private final ReimbDAO reimbDAO;
     private final ReimbStatusService reimbStatusService;
-    public final ReimbCatService reimbCatService;
+    private final ReimbCatService reimbCatService;
 
     public ReimbService(ReimbDAO reimbDAO, ReimbStatusService reimbStatusService, ReimbCatService reimbCatService) {
         this.reimbDAO = reimbDAO;
