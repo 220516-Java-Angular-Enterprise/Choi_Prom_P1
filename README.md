@@ -10,7 +10,7 @@ This project constructs an API that will support a new internal expense reimburs
 ### Project Design Specifications and Documents
 
 ##### Relational Data Model
-![Relational Model]([https://github.com/220207-java-enterprise/assignments/blob/main/foundations-project/imgs/ERS%20Relational%20Model.png](https://github.com/220516-Java-Angular-Enterprise/Choi_Prom_P1/blob/main/p1_er.png)
+![Relational Model][https://github.com/220207-java-enterprise/assignments/blob/main/foundations-project/imgs/ERS%20Relational%20Model.png](https://github.com/220516-Java-Angular-Enterprise/Choi_Prom_P1/blob/main/p1_er.png)
 
 ##### Reimbursement Types
 All Reimbursements are one of the following:
