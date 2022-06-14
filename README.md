@@ -19,11 +19,13 @@ This project constructs an API that will support a new internal expense reimburs
 - JDBC
 - Java EE Servlets
 - JSON Web Tokens
-- JUnit
+- JUnit 5
 - Mockito
 - PostGreSQL (running on AWS RDS)
 - Jenkins (running on Docker)
+- Tomcat 9
 - AWS EC2
+- Postman
 
 ##### System Use Case Diagrams
 ![System Use Case Diagrams](https://raw.githubusercontent.com/220207-java-enterprise/assignments/main/foundations-project/imgs/ERS%20Use%20Case%20Diagram.png)
