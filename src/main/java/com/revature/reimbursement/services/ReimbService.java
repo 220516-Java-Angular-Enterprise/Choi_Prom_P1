@@ -85,7 +85,7 @@ public class ReimbService {
         List<ReimbPrincipal> history = new ArrayList<>();
         List<Reimb> reimbursements = getAll();
         for(Reimb reimbursement: reimbursements){
-            if(reimbursement.getStatusId().equals(id)){
+            if(reimbursement.getAuthorId().equals(id)){
                 history.add(new ReimbPrincipal(
                         reimbursement.getReimbId(), reimbursement.getAmount(),
                         reimbursement.getSubmitted(), reimbursement.getDescription(),
