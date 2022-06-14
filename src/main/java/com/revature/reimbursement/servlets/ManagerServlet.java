@@ -88,13 +88,13 @@ public class ManagerServlet extends HttpServlet {
                 resp.getWriter().write(mapper.writeValueAsString(history));
             }
             else if(uris.length == 4 && uris[3].equals("viewApproved")){
-                List<ReimbPrincipal> history = managerService.getAllApprovedByResolverId(requester.getId());
+                List<ReimbPrincipal> history = managerService.getAllApproved(requester.getId());
                 history.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
                 resp.setContentType("application/json");
                 resp.getWriter().write(mapper.writeValueAsString(history));
             }
             else if(uris.length == 4 && uris[3].equals("viewDenied")){
-                List<ReimbPrincipal> history = managerService.getAllDeniedByResolverId(requester.getId());
+                List<ReimbPrincipal> history = managerService.getAllDenied(requester.getId());
                 history.stream().sorted(Comparator.comparing(ReimbPrincipal::getSubmitted).reversed());
                 resp.setContentType("application/json");
                 resp.getWriter().write(mapper.writeValueAsString(history));

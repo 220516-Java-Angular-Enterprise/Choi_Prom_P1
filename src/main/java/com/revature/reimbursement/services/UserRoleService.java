@@ -6,10 +6,6 @@ import com.revature.reimbursement.models.UserRole;
 public class UserRoleService {
     UserRoleDAO userRoleDAO = new UserRoleDAO();
 
-    public void registerUserRole(UserRole userRole){
-        userRoleDAO.save(userRole);
-    }
-
     public String getRoleById(String id){
         return userRoleDAO.getById(id).getRole();
     }

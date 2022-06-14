@@ -1,8 +1,6 @@
 package com.revature.reimbursement.daos;
 
-import com.revature.reimbursement.models.Reimb;
 import com.revature.reimbursement.models.ReimbCat;
-import com.revature.reimbursement.models.User;
 import com.revature.reimbursement.util.database.ConnectionFactory;
 
 import java.sql.Connection;
