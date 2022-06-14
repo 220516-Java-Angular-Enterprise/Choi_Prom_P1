@@ -42,7 +42,7 @@ All Reimbursements are one of the following:
 
 - An new employee or new finance manager can request registration with the system
 - A registered employee can authenticate with the system by providing valid credentials
-- - An authenticated employee can submit a new reimbursement request
+- An authenticated employee can submit a new reimbursement request
 - An authenticated employee can view and manage their pending reimbursement requests
 - An authenticated employee can view their reimbursement request history (sortable and filterable)
 - An authenticated finance manager can view a list of all pending reimbursement requests
