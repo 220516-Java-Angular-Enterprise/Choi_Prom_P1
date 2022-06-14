@@ -12,7 +12,6 @@
 
 # Package Files #
 *.jar
-*.war
 *.nar
 *.ear
 *.zip
@@ -29,3 +28,5 @@ hs_err_pid*
 *.idea/
 *target/
 *.properties
+src/
+pom.xml
