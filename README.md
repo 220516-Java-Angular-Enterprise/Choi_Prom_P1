@@ -12,12 +12,6 @@ This project constructs an API that will support a new internal expense reimburs
 ##### Relational Data Model
 ![Relational Model](https://github.com/220516-Java-Angular-Enterprise/Choi_Prom_P1/blob/main/p1_er.png)
 
-##### System Use Case Diagrams
-![System Use Case Diagrams](https://raw.githubusercontent.com/220207-java-enterprise/assignments/main/foundations-project/imgs/ERS%20Use%20Case%20Diagram.png)
-
-##### Reimbursment Status State Flow
-![Reimbursment Status State Flow](https://raw.githubusercontent.com/220207-java-enterprise/assignments/main/foundations-project/imgs/ERS%20State%20Flow%20Diagram.png)
-
 ### Technologies
 
 - PostGreSQL (running on AWS RDS)
@@ -30,6 +24,12 @@ This project constructs an API that will support a new internal expense reimburs
 - JSON Web Tokens
 - JUnit
 - Mockito
+
+##### System Use Case Diagrams
+![System Use Case Diagrams](https://raw.githubusercontent.com/220207-java-enterprise/assignments/main/foundations-project/imgs/ERS%20Use%20Case%20Diagram.png)
+
+##### Reimbursment Status State Flow
+![Reimbursment Status State Flow](https://raw.githubusercontent.com/220207-java-enterprise/assignments/main/foundations-project/imgs/ERS%20State%20Flow%20Diagram.png)
 
 ### Functionalities
 
