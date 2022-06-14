@@ -14,9 +14,6 @@ This project constructs an API that will support a new internal expense reimburs
 
 ### Technologies
 
-- PostGreSQL (running on AWS RDS)
-- Jenkins (running on Docker)
-- AWS EC2
 - Java 8
 - Apache Maven
 - JDBC
@@ -24,6 +21,9 @@ This project constructs an API that will support a new internal expense reimburs
 - JSON Web Tokens
 - JUnit
 - Mockito
+- PostGreSQL (running on AWS RDS)
+- Jenkins (running on Docker)
+- AWS EC2
 
 ##### System Use Case Diagrams
 ![System Use Case Diagrams](https://raw.githubusercontent.com/220207-java-enterprise/assignments/main/foundations-project/imgs/ERS%20Use%20Case%20Diagram.png)
