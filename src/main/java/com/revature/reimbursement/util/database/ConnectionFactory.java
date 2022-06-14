@@ -22,9 +22,8 @@ public class ConnectionFactory {
 
     private ConnectionFactory() {
         try {
-            /*System.out.println("Another try.\n\n");
             String currentDir = System.getProperty("user.dir");
-            System.out.println("Current dir using System:" + currentDir);*/
+            System.out.println("Current dir using System:" + currentDir);
             props.load(new FileReader("db.properties"));
         } catch (IOException e) {
             e.printStackTrace();

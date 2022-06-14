@@ -1,6 +1,5 @@
 package com.revature.reimbursement.daos;
 
-import com.revature.reimbursement.models.User;
 import com.revature.reimbursement.models.UserRole;
 import com.revature.reimbursement.util.database.ConnectionFactory;
 

@@ -15,6 +15,9 @@ public class Main {
     public static void main(String args[]){
 
 //        System.out.println(ConnectionFactory.getCon());
+        String currentDir = System.getProperty("user.dir");
+        System.out.println("Current dir using System:" + currentDir);
+        System.out.println(currentDir);
     }
 
 }

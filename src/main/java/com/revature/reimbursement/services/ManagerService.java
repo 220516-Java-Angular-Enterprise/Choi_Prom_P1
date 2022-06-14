@@ -1,8 +1,5 @@
 package com.revature.reimbursement.services;
 
-import com.revature.reimbursement.daos.ReimbDAO;
-import com.revature.reimbursement.daos.ReimbStatDAO;
-import com.revature.reimbursement.daos.ReimbTypeDAO;
 import com.revature.reimbursement.dtos.requests.ApprovalRequest;
 import com.revature.reimbursement.dtos.response.ReimbPrincipal;
 import com.revature.reimbursement.models.Reimb;
@@ -98,7 +95,7 @@ public class ManagerService {
     }
 
 
-    public List<ReimbPrincipal> getAllDeniedByResolverId(String resolver_id){
+    public List<ReimbPrincipal> getAllDenied(String resolver_id){
         List<ReimbPrincipal> denied = new ArrayList<>();
         List<Reimb> reimbursements = reimbService.getAll();
         for(Reimb reimbursement: reimbursements){
@@ -112,7 +109,7 @@ public class ManagerService {
         return denied;
     }
 
-    public List<ReimbPrincipal> getAllApprovedByResolverId(String resolver_id){
+    public List<ReimbPrincipal> getAllApproved(String resolver_id){
         List<ReimbPrincipal> approved = new ArrayList<>();
         List<Reimb> reimbursements = reimbService.getAll();
         for(Reimb reimbursement: reimbursements){
@@ -125,11 +122,6 @@ public class ManagerService {
         }
         return approved;
     }
-
-
-
-
-
 
     public void setApproval(ApprovalRequest request, String resolver_id){
         if(!request.getStatus().equals("APPROVED") && !request.getStatus().equals("DENIED")){
