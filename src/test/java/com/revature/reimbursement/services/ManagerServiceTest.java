@@ -194,31 +194,362 @@ class ManagerServiceTest {
 
     @Test
     void getAllPendingTravel() {
+        List<ReimbPrincipal> pendList = new ArrayList<>();
+        pendLodgeReimb.setReimbId("01");
+        pendTravelReimb.setReimbId("02");
+        pendFoodReimb.setReimbId("03");
+        pendOtherReimb.setReimbId("04");
+        approvedReimb.setReimbId("05");
+        deniedReimb.setReimbId("06");
+        pendLodgeReimb.setStatusId("0");
+        pendTravelReimb.setStatusId("0");
+        pendFoodReimb.setStatusId("0");
+        pendOtherReimb.setStatusId("0");
+        approvedReimb.setStatusId("1");
+        deniedReimb.setStatusId("-1");
+        pendLodgeReimb.setTypId("1");
+        pendTravelReimb.setTypId("2");
+        pendFoodReimb.setTypId("3");
+        pendOtherReimb.setTypId("0");
+        approvedReimb.setTypId("2");
+        deniedReimb.setTypId("3");
 
+
+        pendingLodging.setReimbId("01");
+        pendingTravel.setReimbId("02");
+        pendingFood.setReimbId("03");
+        pendingOther.setReimbId("04");
+        approved.setReimbId("05");
+        denied.setReimbId("06");
+        pendingLodging.setStatusId("PENDING");
+        pendingTravel.setStatusId("PENDING");
+        pendingFood.setStatusId("PENDING");
+        pendingOther.setStatusId("PENDING");
+        approved.setStatusId("APPROVED");
+        denied.setStatusId("DENIED");
+        pendingLodging.setTypeId("LODGING");
+        pendingTravel.setTypeId("TRAVEL");
+        pendingFood.setTypeId("FOOD");
+        pendingOther.setTypeId("OTHER");
+        approved.setTypeId("TRAVEL");
+        denied.setTypeId("FOOD");
+
+
+
+        reimbursements.add(pendLodgeReimb);
+        reimbursements.add(pendTravelReimb);
+        reimbursements.add(pendFoodReimb);
+        reimbursements.add(pendOtherReimb);
+        reimbursements.add(approvedReimb);
+        reimbursements.add(deniedReimb);
+
+        pendList.add(pendingTravel);
+
+        doReturn(reimbursements).when(reimbService).getAll();
+        doReturn("PENDING").when(reimbStatusService).getStatusById("0");
+        doReturn("TRAVEL").when(reimbCatService).getCategoryById("2");
+
+        assertEquals(pendList.toString(), managerService.getAllPendingTravel().toString());
     }
 
     @Test
     void getAllPendingFood() {
+        List<ReimbPrincipal> pendList = new ArrayList<>();
+        pendLodgeReimb.setReimbId("01");
+        pendTravelReimb.setReimbId("02");
+        pendFoodReimb.setReimbId("03");
+        pendOtherReimb.setReimbId("04");
+        approvedReimb.setReimbId("05");
+        deniedReimb.setReimbId("06");
+        pendLodgeReimb.setStatusId("0");
+        pendTravelReimb.setStatusId("0");
+        pendFoodReimb.setStatusId("0");
+        pendOtherReimb.setStatusId("0");
+        approvedReimb.setStatusId("1");
+        deniedReimb.setStatusId("-1");
+        pendLodgeReimb.setTypId("1");
+        pendTravelReimb.setTypId("2");
+        pendFoodReimb.setTypId("3");
+        pendOtherReimb.setTypId("0");
+        approvedReimb.setTypId("2");
+        deniedReimb.setTypId("3");
 
+
+        pendingLodging.setReimbId("01");
+        pendingTravel.setReimbId("02");
+        pendingFood.setReimbId("03");
+        pendingOther.setReimbId("04");
+        approved.setReimbId("05");
+        denied.setReimbId("06");
+        pendingLodging.setStatusId("PENDING");
+        pendingTravel.setStatusId("PENDING");
+        pendingFood.setStatusId("PENDING");
+        pendingOther.setStatusId("PENDING");
+        approved.setStatusId("APPROVED");
+        denied.setStatusId("DENIED");
+        pendingLodging.setTypeId("LODGING");
+        pendingTravel.setTypeId("TRAVEL");
+        pendingFood.setTypeId("FOOD");
+        pendingOther.setTypeId("OTHER");
+        approved.setTypeId("TRAVEL");
+        denied.setTypeId("FOOD");
+
+
+
+        reimbursements.add(pendLodgeReimb);
+        reimbursements.add(pendTravelReimb);
+        reimbursements.add(pendFoodReimb);
+        reimbursements.add(pendOtherReimb);
+        reimbursements.add(approvedReimb);
+        reimbursements.add(deniedReimb);
+
+        pendList.add(pendingFood);
+
+        doReturn(reimbursements).when(reimbService).getAll();
+        doReturn("PENDING").when(reimbStatusService).getStatusById("0");
+        doReturn("FOOD").when(reimbCatService).getCategoryById("3");
+
+        assertEquals(pendList.toString(), managerService.getAllPendingFood().toString());
     }
 
     @Test
     void getAllPendingOther() {
+        List<ReimbPrincipal> pendList = new ArrayList<>();
+        pendLodgeReimb.setReimbId("01");
+        pendTravelReimb.setReimbId("02");
+        pendFoodReimb.setReimbId("03");
+        pendOtherReimb.setReimbId("04");
+        approvedReimb.setReimbId("05");
+        deniedReimb.setReimbId("06");
+        pendLodgeReimb.setStatusId("0");
+        pendTravelReimb.setStatusId("0");
+        pendFoodReimb.setStatusId("0");
+        pendOtherReimb.setStatusId("0");
+        approvedReimb.setStatusId("1");
+        deniedReimb.setStatusId("-1");
+        pendLodgeReimb.setTypId("1");
+        pendTravelReimb.setTypId("2");
+        pendFoodReimb.setTypId("3");
+        pendOtherReimb.setTypId("0");
+        approvedReimb.setTypId("2");
+        deniedReimb.setTypId("3");
 
+
+        pendingLodging.setReimbId("01");
+        pendingTravel.setReimbId("02");
+        pendingFood.setReimbId("03");
+        pendingOther.setReimbId("04");
+        approved.setReimbId("05");
+        denied.setReimbId("06");
+        pendingLodging.setStatusId("PENDING");
+        pendingTravel.setStatusId("PENDING");
+        pendingFood.setStatusId("PENDING");
+        pendingOther.setStatusId("PENDING");
+        approved.setStatusId("APPROVED");
+        denied.setStatusId("DENIED");
+        pendingLodging.setTypeId("LODGING");
+        pendingTravel.setTypeId("TRAVEL");
+        pendingFood.setTypeId("FOOD");
+        pendingOther.setTypeId("OTHER");
+        approved.setTypeId("TRAVEL");
+        denied.setTypeId("FOOD");
+
+
+
+        reimbursements.add(pendLodgeReimb);
+        reimbursements.add(pendTravelReimb);
+        reimbursements.add(pendFoodReimb);
+        reimbursements.add(pendOtherReimb);
+        reimbursements.add(approvedReimb);
+        reimbursements.add(deniedReimb);
+
+        pendList.add(pendingOther);
+
+        doReturn(reimbursements).when(reimbService).getAll();
+        doReturn("PENDING").when(reimbStatusService).getStatusById("0");
+        doReturn("OTHER").when(reimbCatService).getCategoryById("0");
+
+        assertEquals(pendList.toString(), managerService.getAllPendingOther().toString());
     }
 
     @Test
     void getAllDenied() {
+        List<ReimbPrincipal> deniedList = new ArrayList<>();
+        pendLodgeReimb.setReimbId("01");
+        pendTravelReimb.setReimbId("02");
+        pendFoodReimb.setReimbId("03");
+        pendOtherReimb.setReimbId("04");
+        approvedReimb.setReimbId("05");
+        deniedReimb.setReimbId("06");
+        pendLodgeReimb.setStatusId("0");
+        pendTravelReimb.setStatusId("0");
+        pendFoodReimb.setStatusId("0");
+        pendOtherReimb.setStatusId("0");
+        approvedReimb.setStatusId("1");
+        deniedReimb.setStatusId("-1");
+        pendLodgeReimb.setTypId("1");
+        pendTravelReimb.setTypId("2");
+        pendFoodReimb.setTypId("3");
+        pendOtherReimb.setTypId("0");
+        approvedReimb.setTypId("2");
+        deniedReimb.setTypId("3");
+        deniedReimb.setResolverId("Bob");
 
+
+        pendingLodging.setReimbId("01");
+        pendingTravel.setReimbId("02");
+        pendingFood.setReimbId("03");
+        pendingOther.setReimbId("04");
+        approved.setReimbId("05");
+        denied.setReimbId("06");
+        pendingLodging.setStatusId("PENDING");
+        pendingTravel.setStatusId("PENDING");
+        pendingFood.setStatusId("PENDING");
+        pendingOther.setStatusId("PENDING");
+        approved.setStatusId("APPROVED");
+        denied.setStatusId("DENIED");
+        pendingLodging.setTypeId("LODGING");
+        pendingTravel.setTypeId("TRAVEL");
+        pendingFood.setTypeId("FOOD");
+        pendingOther.setTypeId("OTHER");
+        approved.setTypeId("TRAVEL");
+        denied.setTypeId("FOOD");
+
+        reimbursements.add(pendLodgeReimb);
+        reimbursements.add(pendTravelReimb);
+        reimbursements.add(pendFoodReimb);
+        reimbursements.add(pendOtherReimb);
+        reimbursements.add(approvedReimb);
+        reimbursements.add(deniedReimb);
+
+        deniedList.add(denied);
+
+        doReturn(reimbursements).when(reimbService).getAll();
+        doReturn("DENIED").when(reimbStatusService).getStatusById("-1");
+        doReturn("FOOD").when(reimbCatService).getCategoryById("3");
+
+        assertEquals(deniedList.toString(), managerService.getAllDenied("Bob").toString());
     }
 
     @Test
     void getAllApproved() {
+        List<ReimbPrincipal> deniedList = new ArrayList<>();
+        pendLodgeReimb.setReimbId("01");
+        pendTravelReimb.setReimbId("02");
+        pendFoodReimb.setReimbId("03");
+        pendOtherReimb.setReimbId("04");
+        approvedReimb.setReimbId("05");
+        deniedReimb.setReimbId("06");
+        pendLodgeReimb.setStatusId("0");
+        pendTravelReimb.setStatusId("0");
+        pendFoodReimb.setStatusId("0");
+        pendOtherReimb.setStatusId("0");
+        approvedReimb.setStatusId("1");
+        deniedReimb.setStatusId("-1");
+        pendLodgeReimb.setTypId("1");
+        pendTravelReimb.setTypId("2");
+        pendFoodReimb.setTypId("3");
+        pendOtherReimb.setTypId("0");
+        approvedReimb.setTypId("2");
+        deniedReimb.setTypId("3");
+        approvedReimb.setResolverId("Bob");
 
+
+        pendingLodging.setReimbId("01");
+        pendingTravel.setReimbId("02");
+        pendingFood.setReimbId("03");
+        pendingOther.setReimbId("04");
+        approved.setReimbId("05");
+        denied.setReimbId("06");
+        pendingLodging.setStatusId("PENDING");
+        pendingTravel.setStatusId("PENDING");
+        pendingFood.setStatusId("PENDING");
+        pendingOther.setStatusId("PENDING");
+        approved.setStatusId("APPROVED");
+        denied.setStatusId("DENIED");
+        pendingLodging.setTypeId("LODGING");
+        pendingTravel.setTypeId("TRAVEL");
+        pendingFood.setTypeId("FOOD");
+        pendingOther.setTypeId("OTHER");
+        approved.setTypeId("TRAVEL");
+        denied.setTypeId("FOOD");
+
+        reimbursements.add(pendLodgeReimb);
+        reimbursements.add(pendTravelReimb);
+        reimbursements.add(pendFoodReimb);
+        reimbursements.add(pendOtherReimb);
+        reimbursements.add(approvedReimb);
+        reimbursements.add(deniedReimb);
+
+        deniedList.add(approved);
+
+        doReturn(reimbursements).when(reimbService).getAll();
+        doReturn("APPROVED").when(reimbStatusService).getStatusById("1");
+        doReturn("TRAVEL").when(reimbCatService).getCategoryById("2");
+
+        assertEquals(deniedList.toString(), managerService.getAllApproved("Bob").toString());
     }
 
     @Test
     void viewApprovalHistory() {
+        List<ReimbPrincipal> deniedList = new ArrayList<>();
+        pendLodgeReimb.setReimbId("01");
+        pendTravelReimb.setReimbId("02");
+        pendFoodReimb.setReimbId("03");
+        pendOtherReimb.setReimbId("04");
+        approvedReimb.setReimbId("05");
+        deniedReimb.setReimbId("06");
+        pendLodgeReimb.setStatusId("0");
+        pendTravelReimb.setStatusId("0");
+        pendFoodReimb.setStatusId("0");
+        pendOtherReimb.setStatusId("0");
+        approvedReimb.setStatusId("1");
+        deniedReimb.setStatusId("-1");
+        pendLodgeReimb.setTypId("1");
+        pendTravelReimb.setTypId("2");
+        pendFoodReimb.setTypId("3");
+        pendOtherReimb.setTypId("0");
+        approvedReimb.setTypId("2");
+        deniedReimb.setTypId("3");
+        deniedReimb.setResolverId("Bob");
+        approvedReimb.setResolverId("Bob");
 
+
+        pendingLodging.setReimbId("01");
+        pendingTravel.setReimbId("02");
+        pendingFood.setReimbId("03");
+        pendingOther.setReimbId("04");
+        approved.setReimbId("05");
+        denied.setReimbId("06");
+        pendingLodging.setStatusId("PENDING");
+        pendingTravel.setStatusId("PENDING");
+        pendingFood.setStatusId("PENDING");
+        pendingOther.setStatusId("PENDING");
+        approved.setStatusId("APPROVED");
+        denied.setStatusId("DENIED");
+        pendingLodging.setTypeId("LODGING");
+        pendingTravel.setTypeId("TRAVEL");
+        pendingFood.setTypeId("FOOD");
+        pendingOther.setTypeId("OTHER");
+        approved.setTypeId("TRAVEL");
+        denied.setTypeId("FOOD");
+
+        reimbursements.add(pendLodgeReimb);
+        reimbursements.add(pendTravelReimb);
+        reimbursements.add(pendFoodReimb);
+        reimbursements.add(pendOtherReimb);
+        reimbursements.add(approvedReimb);
+        reimbursements.add(deniedReimb);
+
+        deniedList.add(approved);
+        deniedList.add(denied);
+
+        doReturn(reimbursements).when(reimbService).getAll();
+        doReturn("DENIED").when(reimbStatusService).getStatusById("-1");
+        doReturn("APPROVED").when(reimbStatusService).getStatusById("1");
+        doReturn("TRAVEL").when(reimbCatService).getCategoryById("2");
+        doReturn("FOOD").when(reimbCatService).getCategoryById("3");
+
+        assertEquals(deniedList.toString(), managerService.viewApprovalHistory("Bob").toString());
     }
 }
