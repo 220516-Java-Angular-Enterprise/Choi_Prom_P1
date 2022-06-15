@@ -12,9 +12,9 @@
 
 # Package Files #
 *.jar
-*.war
 *.nar
 *.ear
+*.war
 *.zip
 *.tar.gz
 *.rar

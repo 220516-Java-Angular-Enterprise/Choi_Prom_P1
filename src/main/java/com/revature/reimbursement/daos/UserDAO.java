@@ -60,7 +60,8 @@ public class UserDAO implements CrudDAO<User> {
 
     public void updatePassword(User obj) {
         try(Connection con = ConnectionFactory.getInstance().getConnection()){
-            PreparedStatement ps = con.prepareStatement("UPDATE users SET password = crypt(?, gen_salt('bf')), WHERE id = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET password = crypt(?, gen_salt('bf')) WHERE id = ?");
+            System.out.println(obj.getPassword());
             ps.setString(1, obj.getPassword());
             ps.setString(2, obj.getId());
             ps.executeUpdate();
